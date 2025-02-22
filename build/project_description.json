@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "zob2osh_tracker",
-    "project_version":    "6c10823",
+    "project_version":    "67926b4-dirty",
     "project_path":       "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker",
     "idf_path":           "/home/krissal1234/Documents/projects/esp/esp-idf",
     "build_dir":          "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/build",
@@ -1195,7 +1195,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/build/esp-idf/main/libmain.a",
-            "sources": [ "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/zob2osh_tracker.c" ],
+            "sources": [ "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/zob2osh_tracker.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/sd_logger.c" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {

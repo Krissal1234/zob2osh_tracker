@@ -1,0 +1,80 @@
+ segment 4: pa�ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15708
+load:0x40080400,len:4
+load:0x40080404,len:3860
+entry 0x4008063c
+[0;32mI (29) boot: ESP-IDF v5.4-dev-3951-g9106c43acc 2nd stage bootloader[0m
+[0;32mI (29) boot: compile time Feb 22 2025 21:17:59[0m
+[0;32mI (29) boot: Multicore bootloader[0m
+[0;32mI (32) boot: chip revision: v3.0[0m
+[0;32mI (35) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (42) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (46) boot: Enabling RNG early entropy source...[0m
+[0;32mI (51) boot: Partition Table:[0m
+[0;32mI (53) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (59) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (72) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (79) boot: End of partition table[0m
+[0;32mI (82) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=0e018h ( 57368) map[0m
+[0;32mI (109) esp_image: segment 1: paddr=0001e040 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (110) esp_image: segment 2: paddr=0001e064 vaddr=3ffb0000 size=01fb4h (  8116) load[0m
+[0;32mI (116) esp_image: segment 3: paddr=00020020 vaddr=400d0020 size=25934h (153908) map[0m
+[0;32mI (173) esp_image: segment 4: paddr=0004595c vaddr=3ffb1fb4 size=00558h (  1368) load[0m
+[0;32mI (174) esp_image: segment 5: paddr=00045ebc vaddr=40080000 size=0eb14h ( 60180) load[0m
+[0;32mI (208) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (208) boot: Disabling RNG early entropy source...[0m
+[0;32mI (218) cpu_start: Multicore app[0m
+[0;32mI (227) cpu_start: Pro cpu start user code[0m
+[0;32mI (227) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (227) app_init: Application information:[0m
+[0;32mI (227) app_init: Project name:     zob2osh_tracker[0m
+[0;32mI (231) app_init: App version:      67926b4-dirty[0m
+[0;32mI (236) app_init: Compile time:     Feb 22 2025 21:17:53[0m
+[0;32mI (241) app_init: ELF file SHA256:  b83309e9e...[0m
+[0;32mI (245) app_init: ESP-IDF:          v5.4-dev-3951-g9106c43acc[0m
+[0;32mI (251) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (254) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (258) efuse_init: Chip rev:         v3.0[0m
+[0;32mI (262) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (269) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (274) heap_init: At 3FFB2E78 len 0002D188 (180 KiB): DRAM[0m
+[0;32mI (279) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (284) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (290) heap_init: At 4008EB14 len 000114EC (69 KiB): IRAM[0m
+[0;32mI (297) spi_flash: detected chip: generic[0m
+[0;32mI (299) spi_flash: flash io: dio[0m
+[0;33mW (302) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (315) main_task: Started on CPU0[0m
+[0;32mI (325) main_task: Calling app_main()[0m
+[0;32mI (325) MAIN: Starting SD Logger Test...[0m
+[0;32mI (325) SD_LOGGER: Initialising SD Card...[0m
+[0;32mI (325) gpio: GPIO[5]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (335) sdspi_transaction: cmd=52, R1 response: command not supported[0m
+[0;32mI (375) sdspi_transaction: cmd=5, R1 response: command not supported[0m
+[0;32mI (395) SD_LOGGER: SD card mounted successfully[0m
+Name: SD16G
+Type: SDHC/SDXC
+Speed: 5.00 MHz (limit: 5.00 MHz)
+Size: 30264MB
+CSD: ver=2, sector_size=512, capacity=61980672 read_bl_len=9
+SSR: bus_width=1
+[0;32mI (405) SD_LOGGER: Opening file /sdcard/hello.txt[0m
+[1;31mE (405) sdspi_host: data CRC failed, got=0x2196 expected=0xffff[0m
+[0;32mI (415) sdspi_host: 00 00 00 00 00 00 00 ff ff ff ff ff ff ff ff ff[0m
+[1;31mE (415) sdmmc_cmd: sdmmc_read_sectors_dma: sdmmc_send_cmd returned 0x109, failed to get status (0x107)[0m
+[1;31mE (425) diskio_sdmmc: sdmmc_read_blocks failed (0x109)[0m
+[1;31mE (435) SD_LOGGER: Failed to open file for writing[0m
+[1;31mE (435) SD_LOGGER: Failed to write file[0m
+[0;32mI (435) SD_LOGGER: Reading file /sdcard/hello.txt[0m
+[1;31mE (445) sdmmc_cmd: sdmmc_read_sectors_dma: sdmmc_send_cmd returned 0x107, failed to get status (0x107)[0m
+[1;31mE (455) diskio_sdmmc: sdmmc_read_blocks failed (0x107)[0m
+[1;31mE (455) SD_LOGGER: Failed to open file for reading[0m
+[1;31mE (465) SD_LOGGER: Failed to read file[0m
