@@ -14,7 +14,7 @@
 
 static const char *WIFI_SSID = "kris-hotspot";
 static const char *WIFI_PASSWORD = "kris1234";
-static const char *TCP_SERVER_IP = "127.0.0.1"; // Loopback for testing
+static const char *TCP_SERVER_IP = "192.168.0.101";
 static const uint16_t TCP_SERVER_PORT = 12345;
 /** FUNCTION DECLARATIONS **/
 esp_err_t connect_wifi(void);
