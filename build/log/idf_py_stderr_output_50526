@@ -1,0 +1,35 @@
+[0;33m--- esp-idf-monitor 1.5.0 on /dev/ttyUSB0 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0;33m--- 0x40080400: _init at ??:?
+[0m
+[0;33m--- 0x400d7f61: connect_wifi at /home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/network/wifi_manager.c:66 (discriminator 1)
+[0m
+[0;33m--- 0x40088edb: _esp_error_check_failed at /home/krissal1234/Documents/projects/esp/esp-idf/components/esp_system/esp_err.c:49
+[0m
+[0;33m--- 0x40081aa5: panic_abort at /home/krissal1234/Documents/projects/esp/esp-idf/components/esp_system/panic.c:454
+0x40088ee5: esp_system_abort at /home/krissal1234/Documents/projects/esp/esp-idf/components/esp_system/port/esp_system_chip.c:92
+0x40090af5: abort at /home/krissal1234/Documents/projects/esp/esp-idf/components/newlib/abort.c:38
+0x40088edb: _esp_error_check_failed at /home/krissal1234/Documents/projects/esp/esp-idf/components/esp_system/esp_err.c:49
+0x400d7f61: connect_wifi at /home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/network/wifi_manager.c:66 (discriminator 1)
+0x400d7dc6: app_main at /home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/zob2osh_tracker.c:21
+0x4014ead3: main_task at /home/krissal1234/Documents/projects/esp/esp-idf/components/freertos/app_startup.c:208
+0x40089989: vPortTaskWrapper at /home/krissal1234/Documents/projects/esp/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:139
+[0m
+[0;33m--- 0x40080400: _init at ??:?
+[0m
+[0;33m--- 0x400d7f61: connect_wifi at /home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/network/wifi_manager.c:66 (discriminator 1)
+[0m
+[0;33m--- 0x40088edb: _esp_error_check_failed at /home/krissal1234/Documents/projects/esp/esp-idf/components/esp_system/esp_err.c:49
+[0m
+[0;33m--- 0x40081aa5: panic_abort at /home/krissal1234/Documents/projects/esp/esp-idf/components/esp_system/panic.c:454
+0x40088ee5: esp_system_abort at /home/krissal1234/Documents/projects/esp/esp-idf/components/esp_system/port/esp_system_chip.c:92
+0x40090af5: abort at /home/krissal1234/Documents/projects/esp/esp-idf/components/newlib/abort.c:38
+0x40088edb: _esp_error_check_failed at /home/krissal1234/Documents/projects/esp/esp-idf/components/esp_system/esp_err.c:49
+0x400d7f61: connect_wifi at /home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/network/wifi_manager.c:66 (discriminator 1)
+0x400d7dc6: app_main at /home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/zob2osh_tracker.c:21
+0x4014ead3: main_task at /home/krissal1234/Documents/projects/esp/esp-idf/components/freertos/app_startup.c:208
+0x40089989: vPortTaskWrapper at /home/krissal1234/Documents/projects/esp/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:139
+[0m
+[0;33m--- 0x40080400: _init at ??:?
+[0m
+[0m
