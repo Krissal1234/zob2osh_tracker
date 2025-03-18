@@ -5,12 +5,24 @@
 #include "sd_card/sd_logger.h"
 #include "network/wifi_manager.h"
 #include "esp_log.h"
-
+#include "gnss/gps_uart.h"
 void app_main() {
 
+  init_uart();
+  wait_for_gps_fix();
+  char nmea_sentence[128];
 
-    while(1){
-      vTaskDelay(1000);
+
+
+
+    while (1) {
+        if (read_nmea_sentence(nmea_sentence, sizeof(nmea_sentence))) {
+            printf("NMEA Sentence: %s", nmea_sentence);
+        }
+
+
+
+        vTaskDelay(10 / portTICK_PERIOD_MS); // Small delay to avoid CPU overload
     }
 
 }

@@ -1,0 +1,93 @@
+#include "gps_uart.h"
+#include <stdio.h>
+#include <string.h>
+#include "gps_uart.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+#define MAX_WAIT_TIME 1000  // Max wait time (seconds) for a GPS fix
+
+void wait_for_gps_fix() {
+    // char nmea_sentence[128];
+    // int fix_status = 0;
+    // int wait_time = 0;
+
+    // printf("🔄 Waiting for GPS cold start and fix...\n");
+
+    // while (wait_time < MAX_WAIT_TIME) {
+    //     if (read_nmea_sentence(nmea_sentence, sizeof(nmea_sentence))) {
+    //         // Check for GGA sentence
+    //         if (strncmp(nmea_sentence, "$GNGGA", 6) == 0 || strncmp(nmea_sentence, "$GPGGA", 6) == 0) {
+    //             char *token;
+    //             int field = 0;
+
+    //             // Tokenize NMEA sentence
+    //             token = strtok(nmea_sentence, ",");
+    //             while (token != NULL) {
+    //                 field++;
+
+    //                 // Field 7 in $GNGGA is Fix Type (0 = No Fix, 1 = GPS Fix, 2 = DGPS Fix)
+    //                 if (field == 7) {
+    //                     fix_status = atoi(token);  // Convert fix type to integer
+    //                     break;
+    //                 }
+    //                 token = strtok(NULL, ",");
+    //             }
+
+    //             // If we have a valid fix, break out of loop
+    //             if (fix_status > 0) {
+    //                 printf("✅ GPS Fix Acquired! Fix Type: %d\n", fix_status);
+    //                 return;
+    //             }
+    //         }
+    //     }
+
+    //     // No fix yet, print status
+    //     printf("⏳ Waiting for GPS fix... (%d seconds elapsed)\n", wait_time);
+    //     vTaskDelay(1000 / portTICK_PERIOD_MS);  // Delay 1 second
+    //     wait_time++;
+    // }
+
+    // printf("🚨 Timeout! GPS fix not acquired within %d seconds.\n", MAX_WAIT_TIME);
+}
+
+void init_uart() {
+    uart_config_t uart_config = {
+        .baud_rate = 9600,  // Set baud rate to match GPS (typically 9600 or 115200)
+        .data_bits = UART_DATA_8_BITS,
+        .parity    = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE
+    };
+
+    uart_param_config(UART_NUM, &uart_config);
+    uart_set_pin(UART_NUM, TX_PIN, RX_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+    uart_driver_install(UART_NUM, BUF_SIZE * 2, 0, 0, NULL, 0);
+}
+
+int read_nmea_sentence(char *nmea_sentence, size_t max_length) {
+    static char buffer[BUF_SIZE];
+    static int buffer_pos = 0;
+    char temp_char;
+
+    while (uart_read_bytes(UART_NUM, (uint8_t *)&temp_char, 1, 20 / portTICK_PERIOD_MS) > 0) {
+        if (temp_char == '$') {
+            buffer_pos = 0; // Start of a new NMEA sentence
+        }
+
+        if (buffer_pos < BUF_SIZE - 1) {
+            buffer[buffer_pos++] = temp_char;
+        }
+
+        // End of NMEA sentence detected (newline)
+        if (temp_char == '\n') {
+            buffer[buffer_pos] = '\0';  // Null-terminate string
+            strncpy(nmea_sentence, buffer, max_length);
+            buffer_pos = 0;  // Reset for next sentence
+            return 1; // Successfully read a sentence
+        }
+    }
+
+    return 0; // No valid NMEA sentence received
+}
+

@@ -1,0 +1,158 @@
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:6276
+load:0x40078000,len:15708
+load:0x40080400,len:4
+load:0x40080404,len:3860
+entry 0x4008063c
+[0;32mI (29) boot: ESP-IDF v5.4-dev-3951-g9106c43acc 2nd stage bootloader[0m
+[0;32mI (29) boot: compile time Feb 27 2025 22:53:12[0m
+[0;32mI (29) boot: Multicore bootloader[0m
+[0;32mI (32) boot: chip revision: v3.0[0m
+[0;32mI (35) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (39) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (42) boot.esp32: SPI Flash Size : 4MB[0m
+[0;32mI (46) boot: Enabling RNG early entropy source...[0m
+[0;32mI (51) boot: Partition Table:[0m
+[0;32mI (53) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (59) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (72) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (79) boot: End of partition table[0m
+[0;32mI (82) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=0b07ch ( 45180) map[0m
+[0;32mI (105) esp_image: segment 1: paddr=0001b0a4 vaddr=3ff80000 size=0001ch (    28) load[0m
+[0;32mI (106) esp_image: segment 2: paddr=0001b0c8 vaddr=3ffb0000 size=0239ch (  9116) load[0m
+[0;32mI (113) esp_image: segment 3: paddr=0001d46c vaddr=40080000 size=02bach ( 11180) load[0m
+[0;32mI (121) esp_image: segment 4: paddr=00020020 vaddr=400d0020 size=16898h ( 92312) map[0m
+[0;32mI (156) esp_image: segment 5: paddr=000368c0 vaddr=40082bac size=0b3b4h ( 46004) load[0m
+[0;32mI (180) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (181) boot: Disabling RNG early entropy source...[0m
+[0;32mI (191) cpu_start: Multicore app[0m
+[0;32mI (199) cpu_start: Pro cpu start user code[0m
+[0;32mI (199) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (199) app_init: Application information:[0m
+[0;32mI (199) app_init: Project name:     zob2osh_tracker[0m
+[0;32mI (204) app_init: App version:      94ad7c5-dirty[0m
+[0;32mI (208) app_init: Compile time:     Mar 18 2025 23:12:06[0m
+[0;32mI (214) app_init: ELF file SHA256:  36271a097...[0m
+[0;32mI (218) app_init: ESP-IDF:          v5.4-dev-3951-g9106c43acc[0m
+[0;32mI (223) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (227) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (231) efuse_init: Chip rev:         v3.0[0m
+[0;32mI (235) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (241) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (246) heap_init: At 3FFB3088 len 0002CF78 (179 KiB): DRAM[0m
+[0;32mI (252) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (257) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (263) heap_init: At 4008DF60 len 000120A0 (72 KiB): IRAM[0m
+[0;32mI (269) spi_flash: detected chip: generic[0m
+[0;32mI (271) spi_flash: flash io: dio[0m
+[0;32mI (276) main_task: Started on CPU0[0m
+[0;32mI (286) main_task: Calling app_main()[0m
+🔄 Waiting for GPS cold start and fix...
+⏳ Waiting for GPS fix... (0 seconds elapsed)
+⏳ Waiting for GPS fix... (1 seconds elapsed)
+⏳ Waiting for GPS fix... (2 seconds elapsed)
+⏳ Waiting for GPS fix... (3 seconds elapsed)
+⏳ Waiting for GPS fix... (4 seconds elapsed)
+⏳ Waiting for GPS fix... (5 seconds elapsed)
+⏳ Waiting for GPS fix... (6 seconds elapsed)
+⏳ Waiting for GPS fix... (7 seconds elapsed)
+⏳ Waiting for GPS fix... (8 seconds elapsed)
+⏳ Waiting for GPS fix... (9 seconds elapsed)
+⏳ Waiting for GPS fix... (10 seconds elapsed)
+⏳ Waiting for GPS fix... (11 seconds elapsed)
+⏳ Waiting for GPS fix... (12 seconds elapsed)
+⏳ Waiting for GPS fix... (13 seconds elapsed)
+⏳ Waiting for GPS fix... (14 seconds elapsed)
+⏳ Waiting for GPS fix... (15 seconds elapsed)
+⏳ Waiting for GPS fix... (16 seconds elapsed)
+⏳ Waiting for GPS fix... (17 seconds elapsed)
+⏳ Waiting for GPS fix... (18 seconds elapsed)
+⏳ Waiting for GPS fix... (19 seconds elapsed)
+⏳ Waiting for GPS fix... (20 seconds elapsed)
+⏳ Waiting for GPS fix... (21 seconds elapsed)
+⏳ Waiting for GPS fix... (22 seconds elapsed)
+⏳ Waiting for GPS fix... (23 seconds elapsed)
+⏳ Waiting for GPS fix... (24 seconds elapsed)
+⏳ Waiting for GPS fix... (25 seconds elapsed)
+⏳ Waiting for GPS fix... (26 seconds elapsed)
+⏳ Waiting for GPS fix... (27 seconds elapsed)
+⏳ Waiting for GPS fix... (28 seconds elapsed)
+⏳ Waiting for GPS fix... (29 seconds elapsed)
+⏳ Waiting for GPS fix... (30 seconds elapsed)
+⏳ Waiting for GPS fix... (31 seconds elapsed)
+⏳ Waiting for GPS fix... (32 seconds elapsed)
+⏳ Waiting for GPS fix... (33 seconds elapsed)
+⏳ Waiting for GPS fix... (34 seconds elapsed)
+⏳ Waiting for GPS fix... (35 seconds elapsed)
+⏳ Waiting for GPS fix... (36 seconds elapsed)
+⏳ Waiting for GPS fix... (37 seconds elapsed)
+⏳ Waiting for GPS fix... (38 seconds elapsed)
+⏳ Waiting for GPS fix... (39 seconds elapsed)
+⏳ Waiting for GPS fix... (40 seconds elapsed)
+⏳ Waiting for GPS fix... (41 seconds elapsed)
+⏳ Waiting for GPS fix... (42 seconds elapsed)
+⏳ Waiting for GPS fix... (43 seconds elapsed)
+⏳ Waiting for GPS fix... (44 seconds elapsed)
+⏳ Waiting for GPS fix... (45 seconds elapsed)
+⏳ Waiting for GPS fix... (46 seconds elapsed)
+⏳ Waiting for GPS fix... (47 seconds elapsed)
+⏳ Waiting for GPS fix... (48 seconds elapsed)
+⏳ Waiting for GPS fix... (49 seconds elapsed)
+⏳ Waiting for GPS fix... (50 seconds elapsed)
+⏳ Waiting for GPS fix... (51 seconds elapsed)
+⏳ Waiting for GPS fix... (52 seconds elapsed)
+⏳ Waiting for GPS fix... (53 seconds elapsed)
+⏳ Waiting for GPS fix... (54 seconds elapsed)
+⏳ Waiting for GPS fix... (55 seconds elapsed)
+⏳ Waiting for GPS fix... (56 seconds elapsed)
+⏳ Waiting for GPS fix... (57 seconds elapsed)
+⏳ Waiting for GPS fix... (58 seconds elapsed)
+⏳ Waiting for GPS fix... (59 seconds elapsed)
+⏳ Waiting for GPS fix... (60 seconds elapsed)
+⏳ Waiting for GPS fix... (61 seconds elapsed)
+⏳ Waiting for GPS fix... (62 seconds elapsed)
+⏳ Waiting for GPS fix... (63 seconds elapsed)
+⏳ Waiting for GPS fix... (64 seconds elapsed)
+⏳ Waiting for GPS fix... (65 seconds elapsed)
+⏳ Waiting for GPS fix... (66 seconds elapsed)
+⏳ Waiting for GPS fix... (67 seconds elapsed)
+⏳ Waiting for GPS fix... (68 seconds elapsed)
+⏳ Waiting for GPS fix... (69 seconds elapsed)
+⏳ Waiting for GPS fix... (70 seconds elapsed)
+⏳ Waiting for GPS fix... (71 seconds elapsed)
+⏳ Waiting for GPS fix... (72 seconds elapsed)
+⏳ Waiting for GPS fix... (73 seconds elapsed)
+⏳ Waiting for GPS fix... (74 seconds elapsed)
+⏳ Waiting for GPS fix... (75 seconds elapsed)
+⏳ Waiting for GPS fix... (76 seconds elapsed)
+⏳ Waiting for GPS fix... (77 seconds elapsed)
+⏳ Waiting for GPS fix... (78 seconds elapsed)
+⏳ Waiting for GPS fix... (79 seconds elapsed)
+⏳ Waiting for GPS fix... (80 seconds elapsed)
+⏳ Waiting for GPS fix... (81 seconds elapsed)
+⏳ Waiting for GPS fix... (82 seconds elapsed)
+⏳ Waiting for GPS fix... (83 seconds elapsed)
+⏳ Waiting for GPS fix... (84 seconds elapsed)
+⏳ Waiting for GPS fix... (85 seconds elapsed)
+⏳ Waiting for GPS fix... (86 seconds elapsed)
+⏳ Waiting for GPS fix... (87 seconds elapsed)
+⏳ Waiting for GPS fix... (88 seconds elapsed)
+⏳ Waiting for GPS fix... (89 seconds elapsed)
+⏳ Waiting for GPS fix... (90 seconds elapsed)
+⏳ Waiting for GPS fix... (91 seconds elapsed)
+⏳ Waiting for GPS fix... (92 seconds elapsed)
+⏳ Waiting for GPS fix... (93 seconds elapsed)
+⏳ Waiting for GPS fix... (94 seconds elapsed)
+⏳ Waiting for GPS fix... (95 seconds elapsed)
+⏳ Waiting for GPS fix... (96 seconds elapsed)
+⏳ Waiting for GPS fix... (97 seconds elapsed)
+⏳ Waiting for GPS fix... (98 seconds elapsed)
+⏳ Waiting for GPS fix... (99 seconds elapsed)
+⏳ Waiting for GPS fix... (100 seconds elapsed)
+⏳ Waiting for GPS fix... (101 seconds elapsed)
