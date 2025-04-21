@@ -2,34 +2,34 @@
 	"sources" : 
 	[
 		{
-			"file" : "/home/krissal1234/zob_to_osh_tracker/build/CMakeFiles/bootloader"
+			"file" : "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/build/CMakeFiles/bootloader"
 		},
 		{
-			"file" : "/home/krissal1234/zob_to_osh_tracker/build/CMakeFiles/bootloader.rule"
+			"file" : "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/build/CMakeFiles/bootloader.rule"
 		},
 		{
-			"file" : "/home/krissal1234/zob_to_osh_tracker/build/CMakeFiles/bootloader-complete.rule"
+			"file" : "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/build/CMakeFiles/bootloader-complete.rule"
 		},
 		{
-			"file" : "/home/krissal1234/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+			"file" : "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
 		},
 		{
-			"file" : "/home/krissal1234/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+			"file" : "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
 		},
 		{
-			"file" : "/home/krissal1234/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+			"file" : "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
 		},
 		{
-			"file" : "/home/krissal1234/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+			"file" : "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
 		},
 		{
-			"file" : "/home/krissal1234/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+			"file" : "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
 		},
 		{
-			"file" : "/home/krissal1234/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+			"file" : "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
 		},
 		{
-			"file" : "/home/krissal1234/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+			"file" : "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
 		}
 	],
 	"target" : 
