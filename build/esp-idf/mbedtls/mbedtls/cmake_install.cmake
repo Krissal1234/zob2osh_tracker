@@ -39,10 +39,10 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/build/esp-idf/mbedtls/mbedtls/include/cmake_install.cmake")
-  include("/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/build/esp-idf/mbedtls/mbedtls/3rdparty/cmake_install.cmake")
-  include("/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/build/esp-idf/mbedtls/mbedtls/library/cmake_install.cmake")
-  include("/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/build/esp-idf/mbedtls/mbedtls/pkgconfig/cmake_install.cmake")
+  include("/home/krissal1234/zob_to_osh_tracker/build/esp-idf/mbedtls/mbedtls/include/cmake_install.cmake")
+  include("/home/krissal1234/zob_to_osh_tracker/build/esp-idf/mbedtls/mbedtls/3rdparty/cmake_install.cmake")
+  include("/home/krissal1234/zob_to_osh_tracker/build/esp-idf/mbedtls/mbedtls/library/cmake_install.cmake")
+  include("/home/krissal1234/zob_to_osh_tracker/build/esp-idf/mbedtls/mbedtls/pkgconfig/cmake_install.cmake")
 
 endif()
 
