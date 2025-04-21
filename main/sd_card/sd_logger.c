@@ -48,32 +48,70 @@ static esp_err_t s_read_file(const char *path)
 
     return ESP_OK;
 }
-void log_gnss_data(const char *gnss_string, size_t string_length) {
-    const char *path = MOUNT_POINT "/gnss_log.bin";
-
-    ESP_LOGI(TAG, "Opening file %s for logging GNSS data", path);
-    FILE *f = fopen(path, "a");  // Use "a" mode to append to the file
-    if (f == NULL) {
-        ESP_LOGE(TAG, "Failed to open file for writing GNSS data");
-        return;
-    }
 
 
-    // Write the raw GNSS string as bytes to the file
-    size_t written = fwrite(gnss_string, 1, string_length, f);
 
-    // Check if the write was successful
-    if (written != string_length) {
-        ESP_LOGE(TAG, "Failed to write all GNSS data bytes to the file");
+bool upload_offset_exists() {
+    FILE *f = fopen(UPLOAD_OFFSET_PATH, "r");
+    if (f) {
         fclose(f);
+        return true;
+    }
+    return false;
+}
+size_t get_upload_offset() {
+    FILE *f = fopen(MOUNT_POINT "/upload_offset.txt", "r");
+    if (!f) {
+        ESP_LOGW(TAG, "No offset file found, starting from 0");
+        return 0;
+    }
+
+    size_t offset = 0;
+    fscanf(f, "%zu", &offset);
+    fclose(f);
+    ESP_LOGI(TAG, "Read upload offset: %zu", offset);
+    return offset;
+}
+
+void save_upload_offset(size_t offset) {
+    FILE *f = fopen(MOUNT_POINT "/upload_offset.txt", "w");
+    if (!f) {
+        ESP_LOGE(TAG, "Failed to save upload offset");
         return;
     }
 
+    fprintf(f, "%zu", offset);
     fclose(f);
-    ESP_LOGI(TAG, "GNSS data logged successfully");
-
-    return;
+    ESP_LOGI(TAG, "Saved upload offset: %zu", offset);
 }
+
+void log_gnss_data(const char *gnss_string, size_t string_length) {
+    ESP_LOGI(TAG, "Logging GNSS data...");
+
+    FILE *f = fopen(GNSS_LOG_PATH, "a");
+    if (!f) {
+        ESP_LOGE(TAG, "Failed to open GNSS log file");
+        return;
+    }
+
+    long start_offset = ftell(f);  // Capture position before writing
+
+    size_t written = fwrite(gnss_string, 1, string_length, f);
+    fclose(f);
+
+    if (written != string_length) {
+        ESP_LOGE(TAG, "Write error: only %zu of %zu bytes written", written, string_length);
+        return;
+    }
+
+    ESP_LOGI(TAG, "GNSS data logged (%zu bytes)", written);
+
+    // Save initial upload offset if needed
+    if (!upload_offset_exists()) {
+        save_upload_offset(start_offset);
+    }
+}
+
 
 
 void test_write_file(void){
@@ -101,10 +139,14 @@ void test_read_file(void){
 
 
 bool sd_logger_init(void){
-// gpio_set_pull_mode(SD_MISO, GPIO_PULLUP_ONLY);
-// gpio_set_pull_mode(SD_MOSI, GPIO_PULLUP_ONLY);
-// gpio_set_pull_mode(SD_SCK, GPIO_PULLUP_ONLY);
-// gpio_set_pull_mode(SD_CS, GPIO_PULLUP_ONLY);
+gpio_reset_pin(SD_MOSI);
+gpio_reset_pin(SD_MISO);
+gpio_reset_pin(SD_SCK);
+gpio_reset_pin(SD_CS);
+gpio_set_pull_mode(SD_MISO, GPIO_PULLUP_ONLY);
+gpio_set_pull_mode(SD_MOSI, GPIO_PULLUP_ONLY);
+gpio_set_pull_mode(SD_SCK, GPIO_PULLUP_ONLY);
+gpio_set_pull_mode(SD_CS, GPIO_PULLUP_ONLY);
 
   ESP_LOGI(TAG,"Initialising SD Card...");
 

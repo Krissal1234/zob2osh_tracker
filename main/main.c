@@ -26,8 +26,6 @@ uint64_t sleepTimeSeconds = 20;
 
 static void IRAM_ATTR upload_coordinates_handler(void *arg){
 
-   //enter logic to upload coordinates to server
-
    upload_enabled = true;
 
 }
@@ -44,19 +42,23 @@ void app_main() {
 
    //uart setup before polling gps data
    init_uart();
+   //sd card init
 
+   // if(!sd_logger_init()){ //Try with voltage regulator or with powersupply
+   // printf("SD CARD init failed");
+   // }
 
-
+   // GPS Fix and sleep logic
    esp_sleep_enable_ext0_wakeup(UPLOAD_PIN, 0); // LOW = wakeup
 
    esp_sleep_wakeup_cause_t wake_cause = esp_sleep_get_wakeup_cause();
 
    if (wake_cause == ESP_SLEEP_WAKEUP_TIMER) {
-      //  printf("upload enabled: %d\n", upload_enabled);
        gps_tracker_run();
        if (upload_enabled) {
-         printf("\ntest- AAHAHAH");
-         //   upload_data_to_cloud();
+         upload_coordinates_online_net();
+         //enter logic to upload coordinates to server
+
            upload_enabled = false;
        }
    } else if (wake_cause == ESP_SLEEP_WAKEUP_EXT0) {

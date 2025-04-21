@@ -16,7 +16,10 @@
 #define SD_CS    5   // (Chip Select)
 #define EXAMPLE_MAX_CHAR_SIZE    64
 #define MOUNT_POINT "/sdcard"
-#define NAME_OF_FILE "geolocation.txt"
+// #define NAME_OF_FILE "geolocation.txt"
+#define GNSS_LOG_PATH MOUNT_POINT "/gnss_log.bin"
+#define UPLOAD_OFFSET_PATH MOUNT_POINT "/upload_offset.txt"
+
 // GPS Data Structure (12 bytes per entry)
 // typedef struct {
 //     uint32_t timestamp; // 4 bytes
