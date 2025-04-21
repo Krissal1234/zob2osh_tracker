@@ -7,56 +7,68 @@
 #include "tracker/gps_tracker.h"
 #include "esp_log.h"
 #include "gnss/gps_uart.h"
+#include "esp_sleep.h"
 
-#define upload_pin 21
-
+#define UPLOAD_PIN 33
 #define UPLOAD_BUTTON 12
 #define UPLOAD_BUTTON_DURATION_US (5 * 1000000)
 
 
 static const char *TAG = "BUTTON";
 
-volatile bool upload_enabled = false;
+// volatile bool upload_enabled = false;
+RTC_DATA_ATTR bool upload_enabled = false;
+
 volatile bool button_pressed = false;
 volatile int64_t press_start_time = 0;
+uint16_t interrupt_count = 0;
+uint64_t sleepTimeSeconds = 20;
 
+static void IRAM_ATTR upload_coordinates_handler(void *arg){
+
+   //enter logic to upload coordinates to server
+
+   upload_enabled = true;
+
+}
 void app_main() {
 
+   //interrup pin setup for GPIO 21 - UPLOAD PIN
+   gpio_reset_pin(UPLOAD_PIN);
+   gpio_set_direction(UPLOAD_PIN,GPIO_MODE_INPUT);
+   gpio_set_pull_mode(UPLOAD_PIN, GPIO_PULLUP_ONLY);
+   gpio_set_intr_type(UPLOAD_PIN, GPIO_INTR_POSEDGE);
+   gpio_install_isr_service(0);
+   gpio_isr_handler_add(UPLOAD_PIN, upload_coordinates_handler, NULL);
+   gpio_intr_enable(UPLOAD_PIN);
 
-  init_uart();
-  // wait_for_gps_fix();
+   //uart setup before polling gps data
+   init_uart();
 
-  char nmea_sentence[128];
-  bool upload_requested = false;
-  // if (wait_for_fix_and_get_nmea(nmea_sentence, sizeof(nmea_sentence), 30000)) {
-  //     printf("Fix acquired! Sentence: %s\n", nmea_sentence);
-  // } else {
-  //     printf("Timed out waiting for GPS fix.\n");
-  // }
-  while(1){
 
-  gps_tracker_run(); // Tries to obtain a fix for 60 seconds, if successful logs to the sd card
 
-  //Add logic to detect interrupt and turn on a flag
+   esp_sleep_enable_ext0_wakeup(UPLOAD_PIN, 0); // LOW = wakeup
 
-   if (upload_requested) {
-        upload_requested = false;
-        // upload_data_to_cloud();    // do the heavy lifting here
-    }
-  // vTaskDelay(pdMS_TO_TICKS(100));
+   esp_sleep_wakeup_cause_t wake_cause = esp_sleep_get_wakeup_cause();
 
-  // sd_logger_init();
-  // test_write_file();
-//   vTaskDelay(1000 / portTICK_PERIOD_MS); // Small delay to avoid CPU overload
+   if (wake_cause == ESP_SLEEP_WAKEUP_TIMER) {
+      //  printf("upload enabled: %d\n", upload_enabled);
+       gps_tracker_run();
+       if (upload_enabled) {
+         printf("\ntest- AAHAHAH");
+         //   upload_data_to_cloud();
+           upload_enabled = false;
+       }
+   } else if (wake_cause == ESP_SLEEP_WAKEUP_EXT0) {
+       upload_enabled = true;  // Set the flag if woken by button
+      //  printf("Will upload coordinates in the next cycle");
+   }
+
+   esp_sleep_enable_timer_wakeup((uint64_t)sleepTimeSeconds * 1000000);
+   esp_deep_sleep_start();
   }
 
-}
 
-void IRAM_ATTR gpio_isr_handler(void *arg) {
-
-
-
-}
 
 
 // //   void test_network(void){
