@@ -51,14 +51,14 @@ static esp_err_t s_read_file(const char *path)
 
 
 
-bool upload_offset_exists() {
-    FILE *f = fopen(UPLOAD_OFFSET_PATH, "r");
-    if (f) {
-        fclose(f);
-        return true;
-    }
-    return false;
-}
+// bool upload_offset_exists() {
+//     FILE *f = fopen(UPLOAD_OFFSET_PATH, "r");
+//     if (f) {
+//         fclose(f);
+//         return true;
+//     }
+//     return false;
+// }
 size_t get_upload_offset() {
     FILE *f = fopen(MOUNT_POINT "/upload_offset.txt", "r");
     if (!f) {
@@ -74,14 +74,15 @@ size_t get_upload_offset() {
 }
 
 void save_upload_offset(size_t offset) {
-    FILE *f = fopen(MOUNT_POINT "/upload_offset.txt", "w");
-    if (!f) {
+    printf("%zu\n",offset);
+    FILE *fo = fopen(UPLOAD_OFFSET_PATH, "a");
+    if (!fo) {
         ESP_LOGE(TAG, "Failed to save upload offset");
         return;
     }
 
-    fprintf(f, "%zu", offset);
-    fclose(f);
+    fprintf(fo, "%zu", offset);
+    fclose(fo);
     ESP_LOGI(TAG, "Saved upload offset: %zu", offset);
 }
 
@@ -94,7 +95,7 @@ void log_gnss_data(const char *gnss_string, size_t string_length) {
         return;
     }
 
-    long start_offset = ftell(f);  // Capture position before writing
+    size_t start_offset = ftell(f);  // Capture position before writing
 
     size_t written = fwrite(gnss_string, 1, string_length, f);
     fclose(f);
@@ -107,9 +108,7 @@ void log_gnss_data(const char *gnss_string, size_t string_length) {
     ESP_LOGI(TAG, "GNSS data logged (%zu bytes)", written);
 
     // Save initial upload offset if needed
-    if (!upload_offset_exists()) {
-        save_upload_offset(start_offset);
-    }
+    save_upload_offset(start_offset);
 }
 
 

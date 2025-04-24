@@ -18,22 +18,12 @@
 #define MOUNT_POINT "/sdcard"
 // #define NAME_OF_FILE "geolocation.txt"
 #define GNSS_LOG_PATH MOUNT_POINT "/gnss_log.bin"
-#define UPLOAD_OFFSET_PATH MOUNT_POINT "/upload_offset.txt"
-
-// GPS Data Structure (12 bytes per entry)
-// typedef struct {
-//     uint32_t timestamp; // 4 bytes
-//     float longitude;  // 4 bytes
-//     float latitude;   // 4 bytes
-// } GPSLogEntry;
+#define UPLOAD_OFFSET_PATH MOUNT_POINT "/upload_offset.bin"
 
 // Function Prototypes
 void test_write_file(void);
 void test_read_file(void);
 void log_gnss_data(const char *gnss_string, size_t string_length);
 bool sd_logger_init(void);
-// bool sd_log_data(const GPSLogEntry *entry);
-// uint32_t sd_get_last_byte_offset(void);
-// void sd_set_last_byte_offset(uint32_t offset);
 
 #endif // SD_LOGGER_H

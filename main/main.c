@@ -44,9 +44,9 @@ void app_main() {
    init_uart();
    //sd card init
 
-   // if(!sd_logger_init()){ //Try with voltage regulator or with powersupply
-   // printf("SD CARD init failed");
-   // }
+   if(!sd_logger_init()){ //Try with voltage regulator or with powersupply
+   printf("SD CARD init failed");
+   }
 
    // GPS Fix and sleep logic
    esp_sleep_enable_ext0_wakeup(UPLOAD_PIN, 0); // LOW = wakeup
@@ -56,7 +56,7 @@ void app_main() {
    if (wake_cause == ESP_SLEEP_WAKEUP_TIMER) {
        gps_tracker_run();
        if (upload_enabled) {
-         upload_coordinates_online_net();
+        //  upload_coordinates_online_net();
          //enter logic to upload coordinates to server
 
            upload_enabled = false;

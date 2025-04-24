@@ -15,6 +15,6 @@ void gps_tracker_run() {
         return;
     }else{
         printf("GPS fix acquired: %s\n", fix_sentence);
-        // log_gnss_data(fix_sentence, strlen(fix_sentence));
+        log_gnss_data(fix_sentence, strlen(fix_sentence));
     }
 }
