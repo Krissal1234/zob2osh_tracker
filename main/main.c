@@ -8,6 +8,7 @@
 #include "esp_log.h"
 #include "gnss/gps_uart.h"
 #include "esp_sleep.h"
+#include "tracker/gps_tracker.h"  // Adjust the path as needed based on your folder layout
 
 #define UPLOAD_PIN 33
 #define UPLOAD_BUTTON 12
@@ -29,8 +30,19 @@ static void IRAM_ATTR upload_coordinates_handler(void *arg){
    upload_enabled = true;
 
 }
-void app_main() {
+void test_offset_write(void) {
+  FILE *f = fopen("/sdcard/test_offset.bin", "w");
+  if (!f) {
+      perror("test_offset fopen");
+      ESP_LOGE(TAG, "Test offset file failed to open");
+      return;
+  }
+  fprintf(f, "1234");
+  fclose(f);
+  ESP_LOGI(TAG, "Test offset file written!");
+}
 
+void app_main() {
    //interrup pin setup for GPIO 21 - UPLOAD PIN
    gpio_reset_pin(UPLOAD_PIN);
    gpio_set_direction(UPLOAD_PIN,GPIO_MODE_INPUT);
@@ -40,23 +52,27 @@ void app_main() {
    gpio_isr_handler_add(UPLOAD_PIN, upload_coordinates_handler, NULL);
    gpio_intr_enable(UPLOAD_PIN);
 
-   //uart setup before polling gps data
+   //uart init before polling gps data
    init_uart();
-   //sd card init
 
-   if(!sd_logger_init()){ //Try with voltage regulator or with powersupply
+   //sd card init
+   if(!sd_logger_init()){
    printf("SD CARD init failed");
    }
+  //  test_offset_write();
 
-   // GPS Fix and sleep logic
-   esp_sleep_enable_ext0_wakeup(UPLOAD_PIN, 0); // LOW = wakeup
+   esp_sleep_enable_ext0_wakeup(UPLOAD_PIN, 0);
 
    esp_sleep_wakeup_cause_t wake_cause = esp_sleep_get_wakeup_cause();
 
    if (wake_cause == ESP_SLEEP_WAKEUP_TIMER) {
        gps_tracker_run();
        if (upload_enabled) {
-        //  upload_coordinates_online_net();
+        if (connect_wifi() == WIFI_SUCCESS) {
+            gps_tracker_upload();  // Reads and uploads GNSS records
+        } else {
+            ESP_LOGE("MAIN", "Wi-Fi connection failed, cannot upload");
+        }
          //enter logic to upload coordinates to server
 
            upload_enabled = false;

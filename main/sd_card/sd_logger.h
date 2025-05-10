@@ -18,12 +18,18 @@
 #define MOUNT_POINT "/sdcard"
 // #define NAME_OF_FILE "geolocation.txt"
 #define GNSS_LOG_PATH MOUNT_POINT "/gnss_log.bin"
-#define UPLOAD_OFFSET_PATH MOUNT_POINT "/upload_offset.bin"
+#define UPLOAD_OFFSET_PATH MOUNT_POINT "/offset.bin"
+
+
 
 // Function Prototypes
 void test_write_file(void);
 void test_read_file(void);
 void log_gnss_data(const char *gnss_string, size_t string_length);
+void log_gnss_data_struct(const char *nmea_sentence);
+size_t read_upload_offset();
+
+void save_upload_offset(size_t offset);
 bool sd_logger_init(void);
 
 #endif // SD_LOGGER_H

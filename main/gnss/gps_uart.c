@@ -9,50 +9,6 @@
 
 #define MAX_WAIT_TIME 1000  // Max wait time (seconds) for a GPS fix
 
-void wait_for_gps_fix() {
-    // char nmea_sentence[128];
-    // int fix_status = 0;
-    // int wait_time = 0;
-
-    // printf("🔄 Waiting for GPS cold start and fix...\n");
-
-    // while (wait_time < MAX_WAIT_TIME) {
-    //     if (read_nmea_sentence(nmea_sentence, sizeof(nmea_sentence))) {
-    //         // Check for GGA sentence
-    //         if (strncmp(nmea_sentence, "$GNGGA", 6) == 0 || strncmp(nmea_sentence, "$GPGGA", 6) == 0) {
-    //             char *token;
-    //             int field = 0;
-
-    //             // Tokenize NMEA sentence
-    //             token = strtok(nmea_sentence, ",");
-    //             while (token != NULL) {
-    //                 field++;
-
-    //                 // Field 7 in $GNGGA is Fix Type (0 = No Fix, 1 = GPS Fix, 2 = DGPS Fix)
-    //                 if (field == 7) {
-    //                     fix_status = atoi(token);  // Convert fix type to integer
-    //                     break;
-    //                 }
-    //                 token = strtok(NULL, ",");
-    //             }
-
-    //             // If we have a valid fix, break out of loop
-    //             if (fix_status > 0) {
-    //                 printf("✅ GPS Fix Acquired! Fix Type: %d\n", fix_status);
-    //                 return;
-    //             }
-    //         }
-    //     }
-
-    //     // No fix yet, print status
-    //     printf("⏳ Waiting for GPS fix... (%d seconds elapsed)\n", wait_time);
-    //     vTaskDelay(1000 / portTICK_PERIOD_MS);  // Delay 1 second
-    //     wait_time++;
-    // }
-
-    // printf("🚨 Timeout! GPS fix not acquired within %d seconds.\n", MAX_WAIT_TIME);
-}
-
 void init_uart() {
     uart_config_t uart_config = {
         .baud_rate = 9600,  // Set baud rate to match GPS (typically 9600 or 115200)
@@ -73,7 +29,7 @@ int wait_for_fix_and_get_nmea(char *output_sentence, size_t max_len, uint32_t ti
 
     while ((esp_timer_get_time() - start_time) / 1000 < timeout_ms) { //keep checking until timeout
         if (read_nmea_sentence(nmea_buffer, sizeof(nmea_buffer))) {
-            printf("test: %s/n",nmea_buffer);
+            printf("%s/n",nmea_buffer);
             if (sentence_has_fix(nmea_buffer)) {
                 strncpy(output_sentence, nmea_buffer, max_len);
                 return 1; // Got a fix and returned the sentence

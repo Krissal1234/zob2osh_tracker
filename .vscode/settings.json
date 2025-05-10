@@ -10,6 +10,9 @@
   "idf.flashType": "UART",
   "files.associations": {
     "cstdio": "c",
-    "fstream": "c"
+    "fstream": "c",
+    "gps_uart.h": "c",
+    "gps_tracker.h": "c",
+    "sockets.h": "c"
   }
 }

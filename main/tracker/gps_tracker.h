@@ -1,8 +1,18 @@
-#ifndef GPS_TRACKER_H
-#define GPS_TRACKER_H
+#ifndef GNSS_RECORD_H
+#define GNSS_RECORD_H
 
-#define GPS_TIMEOUT_MS 60000 // gps timeout, tries to find a fix within a minute
+#include <stdint.h>
+#define GPS_TIMEOUT_MS 10000
 
-void gps_tracker_run();  // Starts fix + tracking + SD logging
+typedef struct __attribute__((__packed__)) {
+    uint32_t timestamp;
+    float latitude;
+    float longitude;
+    float altitude;
+    uint8_t fix_quality;
+} gnss_record_t;
 
-#endif
+#define GNSS_RECORD_SIZE sizeof(gnss_record_t)
+void gps_tracker_run();
+void gps_tracker_upload();
+#endif // GNSS_RECORD_H
