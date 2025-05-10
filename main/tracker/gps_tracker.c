@@ -8,7 +8,7 @@
 #include "../tracker/gps_tracker.h"      // Struct + GNSS_RECORD_SIZE
 
 static const char *TAG = "GPS_TRACker";
-
+#define BATCH_SIZE 10
 void gps_tracker_upload() {
     size_t offset = read_upload_offset();
     ESP_LOGI(TAG, "Uploading GNSS data from offset: %zu", offset);
@@ -21,17 +21,18 @@ void gps_tracker_upload() {
 
     fseek(f, offset, SEEK_SET);
 
-    gnss_record_t record;
+    gnss_record_t records[BATCH_SIZE];
+    size_t records_read;
     size_t current_offset = offset;
     bool uploaded_any = false;
 
-    while (fread(&record, GNSS_RECORD_SIZE, 1, f) == 1) {
-        if (upload_gnss_record(&record)) {
-            current_offset += GNSS_RECORD_SIZE;
+    while ((records_read = fread(records, GNSS_RECORD_SIZE, BATCH_SIZE, f)) > 0) {
+        if (upload_gnss_batch(records, records_read)) {
+            current_offset += records_read * GNSS_RECORD_SIZE;
             uploaded_any = true;
-            ESP_LOGI(TAG, "Uploaded record. New offset: %zu", current_offset);
+            ESP_LOGI(TAG, "Uploaded %zu records. New offset: %zu", records_read, current_offset);
         } else {
-            ESP_LOGW(TAG, "Upload failed. Stopping at offset: %zu", current_offset);
+            ESP_LOGW(TAG, "Batch upload failed. Stopping at offset: %zu", current_offset);
             break;
         }
     }

@@ -59,7 +59,6 @@ bool upload_gnss_batch(const gnss_record_t *records, size_t count) {
         return false;
     }
 
-    connect_wifi();  // Ensure we're connected
 
     esp_http_client_config_t config = {
         .url = UPLOAD_SERVER_URL,
