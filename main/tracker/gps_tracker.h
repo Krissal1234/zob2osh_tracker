@@ -2,7 +2,8 @@
 #define GNSS_RECORD_H
 
 #include <stdint.h>
-#define GPS_TIMEOUT_MS 10000
+#include "config.h"
+#define GPS_TIMEOUT_MS app_config.gps_timeout
 
 typedef struct __attribute__((__packed__)) {
     uint32_t timestamp;

@@ -22,7 +22,6 @@ static EventGroupHandle_t wifi_event_group;
 static int s_retry_num = 0;
 static const char *TAG = "WIFI_UPLOAD";
 
-#define UPLOAD_SERVER_URL "http://192.168.0.101:8080"
 
 bool upload_gnss_record(const gnss_record_t *record) {
     if (!record) {
@@ -31,7 +30,7 @@ bool upload_gnss_record(const gnss_record_t *record) {
     }
 
     esp_http_client_config_t config = {
-        .url = UPLOAD_SERVER_URL,
+        .url = TCP_SERVER_IP,
         .method = HTTP_METHOD_POST,
         .timeout_ms = 5000,
     };
@@ -61,7 +60,7 @@ bool upload_gnss_batch(const gnss_record_t *records, size_t count) {
 
 
     esp_http_client_config_t config = {
-        .url = UPLOAD_SERVER_URL,
+        .url = TCP_SERVER_IP,
         .method = HTTP_METHOD_POST,
         .timeout_ms = 10000,
     };

@@ -9,6 +9,7 @@
 #include "gnss/gps_uart.h"
 #include "esp_sleep.h"
 #include "tracker/gps_tracker.h"  // Adjust the path as needed based on your folder layout
+#include "config.h"
 
 #define UPLOAD_PIN 33
 #define UPLOAD_BUTTON 12
@@ -55,11 +56,23 @@ void app_main() {
    //uart init before polling gps data
    init_uart();
 
-   //sd card init
-   if(!sd_logger_init()){
-   printf("SD CARD init failed");
-   }
-  //  test_offset_write();
+ // 1. Initialize SD card first
+ if (!sd_logger_init()) {
+    ESP_LOGE(TAG, "SD card init failed, aborting");
+  }
+
+  // 2. Load config from SD card
+  if (!load_config_from_file("/sdcard/config.txt")) {
+    ESP_LOGE(TAG, "Failed to load config file");
+  }
+
+  ESP_LOGI(TAG, "Config loaded:");
+  ESP_LOGI(TAG, "SSID: %s", app_config.wifi_ssid);
+  ESP_LOGI(TAG, "Server: %s", app_config.server_url);
+  ESP_LOGI(TAG, "Pass: %s", app_config.wifi_password);
+
+  ESP_LOGI(TAG, "GPS Timeout: %d ms", app_config.gps_timeout);
+
 
    esp_sleep_enable_ext0_wakeup(UPLOAD_PIN, 0);
 
@@ -87,30 +100,3 @@ void app_main() {
   }
 
 
-
-
-// //   void test_network(void){
-// //     esp_err_t status = connect_wifi();
-// //     if(status == WIFI_SUCCESS){
-// //       ESP_LOGI("Main", "ESP connected successfully");
-// //     }
-// //     else{
-// //       ESP_LOGI("Main","ESP connection failed");
-// //     }
-
-
-// //     esp_err_t stat = connect_tcp_server();
-// //   }
-// //   void test_sd_card(void){
-
-// //   ESP_LOGI("MAIN", "Starting SD Logger Test...");
-
-// //   // Initialize SD Card
-// //   if (!sd_logger_init()) {
-// //       ESP_LOGE("MAIN", "SD card initialization failed!");
-// //       return;
-// //   }
-
-// //   test_write_file();
-// //   test_read_file();
-//   }
