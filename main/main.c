@@ -31,17 +31,17 @@ static void IRAM_ATTR upload_coordinates_handler(void *arg){
    upload_enabled = true;
 
 }
-void test_offset_write(void) {
-  FILE *f = fopen("/sdcard/test_offset.bin", "w");
-  if (!f) {
-      perror("test_offset fopen");
-      ESP_LOGE(TAG, "Test offset file failed to open");
-      return;
-  }
-  fprintf(f, "1234");
-  fclose(f);
-  ESP_LOGI(TAG, "Test offset file written!");
-}
+// void test_offset_write(void) {
+//   FILE *f = fopen("/sdcard/test_offset.bin", "w");
+//   if (!f) {
+//       perror("test_offset fopen");
+//       ESP_LOGE(TAG, "Test offset file failed to open");
+//       return;
+//   }
+//   fprintf(f, "1234");
+//   fclose(f);
+//   ESP_LOGI(TAG, "Test offset file written!");
+// }
 
 void app_main() {
    //interrup pin setup for GPIO 21 - UPLOAD PIN

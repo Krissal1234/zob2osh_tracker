@@ -57,7 +57,17 @@ bool upload_gnss_batch(const gnss_record_t *records, size_t count) {
         ESP_LOGE(TAG, "Invalid batch upload parameters");
         return false;
     }
-
+    for (size_t i = 0; i < count; ++i) {
+        const gnss_record_t *rec = &records[i];
+        ESP_LOGI(TAG,
+                 "Record %d: ts=%" PRIu32 ", lat=%f, lon=%f, alt=%f, fix=%d",
+                 (int)i,
+                 rec->timestamp,
+                 rec->latitude,
+                 rec->longitude,
+                 rec->altitude,
+                 rec->fix_quality);
+    }
 
     esp_http_client_config_t config = {
         .url = TCP_SERVER_IP,

@@ -1,4 +1,4 @@
-# Install script for directory: /home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/main
+# Install script for directory: /home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

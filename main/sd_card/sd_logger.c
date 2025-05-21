@@ -10,7 +10,7 @@
 #include "sdmmc_cmd.h"
 #include <errno.h>   // <-- at the top
 #include "../tracker/gps_tracker.h"  // Adjust the path based on your structure
-
+#include <inttypes.h>  // Make sure this is included
 static const char *TAG = "SD_LOGGER";
 
 sdmmc_card_t *card;
@@ -69,14 +69,17 @@ void log_gnss_data_struct(const char *nmea_sentence) {
     uint32_t timestamp = 0;
     float latitude = 0.0f, longitude = 0.0f, altitude = 0.0f;
     uint8_t fix_quality = 0;
-
+    printf(fields[0]);
     if (strncmp(fields[0], "$GPGGA", 6) == 0) {
+        printf("test");
         // Parse GGA
         timestamp = (fields[1] && strlen(fields[1])) ? atoi(fields[1]) : 0;
         latitude = (fields[2] && fields[3]) ? parse_nmea_latlon(fields[2], fields[3]) : 0.0f;
         longitude = (fields[4] && fields[5]) ? parse_nmea_latlon(fields[4], fields[5]) : 0.0f;
         fix_quality = (fields[6] && strlen(fields[6])) ? atoi(fields[6]) : 0;
         altitude = (fields[9] && strlen(fields[9])) ? atof(fields[9]) : 0.0f;
+
+
     } else if (strncmp(fields[0], "$GNRMC", 6) == 0) {
         // Parse RMC
         timestamp = (fields[1] && strlen(fields[1])) ? atoi(fields[1]) : 0;
@@ -103,6 +106,11 @@ void log_gnss_data_struct(const char *nmea_sentence) {
         .altitude = altitude,
         .fix_quality = fix_quality
     };
+    ESP_LOGI(TAG, "GNSS record size: %d", sizeof(gnss_record_t));
+
+    ESP_LOGI(TAG, "Parsed fields: ts=%" PRIu32 " lat=%.6f lon=%.6f alt=%.2f fix=%d",
+        timestamp, latitude, longitude, altitude, fix_quality);
+
 
     FILE *f = fopen(GNSS_LOG_PATH, "ab");
     if (!f) {

@@ -13,6 +13,7 @@
     "fstream": "c",
     "gps_uart.h": "c",
     "gps_tracker.h": "c",
-    "sockets.h": "c"
+    "sockets.h": "c",
+    "esp_vfs_fat.h": "c"
   }
 }

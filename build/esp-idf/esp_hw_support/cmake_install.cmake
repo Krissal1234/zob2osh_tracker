@@ -39,11 +39,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/build/esp-idf/esp_hw_support/port/esp32/cmake_install.cmake")
+  include("/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/build/esp-idf/esp_hw_support/port/esp32/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/build/esp-idf/esp_hw_support/lowpower/cmake_install.cmake")
+  include("/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/build/esp-idf/esp_hw_support/lowpower/cmake_install.cmake")
 endif()
 

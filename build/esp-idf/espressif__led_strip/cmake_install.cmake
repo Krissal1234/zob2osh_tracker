@@ -1,4 +1,4 @@
-# Install script for directory: /home/krissal1234/Documents/projects/esp/esp-idf/projects/zob_to_osh_tracker/managed_components/espressif__led_strip
+# Install script for directory: /home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/managed_components/espressif__led_strip
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

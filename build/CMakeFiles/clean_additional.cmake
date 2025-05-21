@@ -18,7 +18,7 @@ if("${CONFIG}" STREQUAL "" OR "${CONFIG}" STREQUAL "")
   "ldgen_libraries.in"
   "project_elf_src_esp32.c"
   "x509_crt_bundle.S"
-  "zob_to_osh_tracker.bin"
-  "zob_to_osh_tracker.map"
+  "zob2osh_tracker.bin"
+  "zob2osh_tracker.map"
   )
 endif()
