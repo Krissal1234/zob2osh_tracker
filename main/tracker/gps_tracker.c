@@ -67,21 +67,21 @@ void gps_tracker_upload() {
 }
 
 void gps_tracker_run() {
-    char fix_sentence[128];
+    // char fix_sentence[128];
 
     printf(" Waiting for GPS fix...\n");
 
     //testing purposes
-    // char fix_sentence[128] = "$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47";
-    // printf("GPS fix acquired (TEST): %s\n", fix_sentence);
+    char fix_sentence[128] = "$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47";
+    printf("GPS fix acquired (TEST): %s\n", fix_sentence);
 
-    // log_gnss_data_struct(fix_sentence);
+    log_gnss_data_struct(fix_sentence);
 
-    if (!wait_for_fix_and_get_nmea(fix_sentence, sizeof(fix_sentence), GPS_TIMEOUT_MS)) {
-        printf("GPS fix not acquired within timeout.\n");
-        return;
-    }else{
-        printf("GPS fix acquired: %s\n", fix_sentence);
-        log_gnss_data_struct(fix_sentence);
-    }
+    // if (!wait_for_fix_and_get_nmea(fix_sentence, sizeof(fix_sentence), GPS_TIMEOUT_MS)) {
+    //     printf("GPS fix not acquired within timeout.\n");
+    //     return;
+    // }else{
+    //     printf("GPS fix acquired: %s\n", fix_sentence);
+    //     log_gnss_data_struct(fix_sentence);
+    // }
 }
