@@ -16,11 +16,16 @@
 #include "esp_http_client.h"
 #include <inttypes.h>
 #include "../tls_cert/root_cert.c"
+#include "mbedtls/base64.h"
+
 
 /** GLOBAL VARIABLES **/
 static EventGroupHandle_t wifi_event_group;
 static int s_retry_num = 0;
 static const char *TAG = "WIFI_UPLOAD";
+static char auth_plain[130];
+static char auth_base64[173];
+static char auth_header[179];
 
 bool upload_gnss_record(const gnss_record_t *record) {
     if (!record) {
@@ -81,6 +86,17 @@ bool upload_gnss_batch(const gnss_record_t *records, size_t count) {
 
     esp_http_client_handle_t client = esp_http_client_init(&config);
     esp_http_client_set_header(client, "Content-Type", "application/octet-stream");
+
+    //Generate the base64-encoded Authorization header
+    snprintf(auth_plain, sizeof(auth_plain), "%s:%s", SERVER_USERNAME, SERVER_PASSWORD);
+
+    size_t outlen = 0;
+    mbedtls_base64_encode((unsigned char *)auth_base64, sizeof(auth_base64), &outlen,
+                          (const unsigned char *)auth_plain, strlen(auth_plain));
+
+    snprintf(auth_header, sizeof(auth_header), "Basic %s", auth_base64);
+
+    esp_http_client_set_header(client, "Authorization", auth_header);
 
     size_t total_size = count * GNSS_RECORD_SIZE;
     esp_http_client_set_post_field(client, (const char *)records, total_size);
@@ -217,41 +233,3 @@ esp_err_t connect_wifi()
     return status;
 }
 
-
-esp_err_t connect_tcp_server(void)
-{
-    struct sockaddr_in serverInfo = {0};
-    char readBuffer[1024] = {0};
-
-    serverInfo.sin_family = AF_INET;
-    serverInfo.sin_addr.s_addr = inet_addr(TCP_SERVER_IP);
-    serverInfo.sin_port = htons(TCP_SERVER_PORT);
-
-    int sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock < 0)
-    {
-        ESP_LOGE(TAG, "Failed to create a socket");
-        return TCP_FAILURE;
-    }
-
-    if (connect(sock, (struct sockaddr *)&serverInfo, sizeof(serverInfo)) != 0)
-    {
-        ESP_LOGE(TAG, "Failed to connect to server");
-        close(sock);
-        return TCP_FAILURE;
-    }
-
-    ESP_LOGI(TAG, "Connected to TCP server");
-    bzero(readBuffer, sizeof(readBuffer));
-    int r = read(sock, readBuffer, sizeof(readBuffer) - 1);
-    for (int i = 0; i < r; i++) {
-        putchar(readBuffer[i]);
-    }
-
-    if (strcmp(readBuffer, "HELLO") == 0)
-    {
-        ESP_LOGI(TAG, "Received HELLO message");
-    }
-
-    return TCP_SUCCESS;
-}

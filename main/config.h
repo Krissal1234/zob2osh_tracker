@@ -9,6 +9,8 @@ typedef struct {
     char server_url[128];
     int gps_timeout;
     int upload_retry;
+    char server_username[64];
+    char server_password[64];
 } config_t;
 
 extern config_t app_config;

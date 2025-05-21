@@ -16,7 +16,9 @@
 static const char *WIFI_SSID = app_config.wifi_ssid;
 static const char *WIFI_PASSWORD = app_config.wifi_password;
 static const char *TCP_SERVER_IP = app_config.server_url;
-static const uint16_t TCP_SERVER_PORT = 12345;
+static const char *SERVER_USERNAME = app_config.server_username;
+static const char *SERVER_PASSWORD = app_config.server_password;
+
 /** FUNCTION DECLARATIONS **/
 esp_err_t connect_wifi(void);
 esp_err_t connect_tcp_server(void);

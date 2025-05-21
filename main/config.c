@@ -21,6 +21,8 @@ bool load_config_from_file(const char *path) {
         else if (strcmp(key, "SERVER_URL") == 0) strncpy(app_config.server_url, val, sizeof(app_config.server_url));
         else if (strcmp(key, "GPS_TIMEOUT") == 0) app_config.gps_timeout = atoi(val);
         else if (strcmp(key, "UPLOAD_RETRY") == 0) app_config.upload_retry = atoi(val);
+        else if (strcmp(key, "SERVER_USERNAME") == 0) strncpy(app_config.server_username, val, sizeof(app_config.server_username));
+        else if (strcmp(key, "SERVER_PASSWORD") == 0) strncpy(app_config.server_password, val, sizeof(app_config.server_password));
     }
 
     fclose(f);
