@@ -32,6 +32,7 @@ int wait_for_fix_and_get_nmea(char *output_sentence, size_t max_len, uint32_t ti
             printf("%s/n",nmea_buffer);
             if (sentence_has_fix(nmea_buffer)) {
                 strncpy(output_sentence, nmea_buffer, max_len);
+
                 return 1; // Got a fix and returned the sentence
             }
         }

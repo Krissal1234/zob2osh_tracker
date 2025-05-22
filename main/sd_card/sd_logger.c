@@ -67,20 +67,13 @@ void log_gnss_data_struct(const char *nmea_sentence) {
     }
 
     uint32_t timestamp = 0;
+    uint32_t date = 0;
     float latitude = 0.0f, longitude = 0.0f, altitude = 0.0f;
+    uint8_t sentence_type = 0;
     uint8_t fix_quality = 0;
-    printf(fields[0]);
-    if (strncmp(fields[0], "$GPGGA", 6) == 0) {
-        printf("test");
-        // Parse GGA
-        timestamp = (fields[1] && strlen(fields[1])) ? atoi(fields[1]) : 0;
-        latitude = (fields[2] && fields[3]) ? parse_nmea_latlon(fields[2], fields[3]) : 0.0f;
-        longitude = (fields[4] && fields[5]) ? parse_nmea_latlon(fields[4], fields[5]) : 0.0f;
-        fix_quality = (fields[6] && strlen(fields[6])) ? atoi(fields[6]) : 0;
-        altitude = (fields[9] && strlen(fields[9])) ? atof(fields[9]) : 0.0f;
 
-
-    } else if (strncmp(fields[0], "$GNRMC", 6) == 0) {
+    if (strncmp(fields[0], "$GNRMC", 6) == 0) {
+        sentence_type = 2;
         // Parse RMC
         timestamp = (fields[1] && strlen(fields[1])) ? atoi(fields[1]) : 0;
         // Field 2 is status: A=active, V=void
@@ -91,7 +84,19 @@ void log_gnss_data_struct(const char *nmea_sentence) {
         }
         latitude = (fields[3] && fields[4]) ? parse_nmea_latlon(fields[3], fields[4]) : 0.0f;
         longitude = (fields[5] && fields[6]) ? parse_nmea_latlon(fields[5], fields[6]) : 0.0f;
-        altitude = 0.0f; // RMC has no altitude
+        if (fields[9] && strlen(fields[9])) {
+            date = atoi(fields[9]);  // e.g. "210525" for 25 May 2021
+        }
+    }else if (strncmp(fields[0], "$GPGGA", 6) == 0) {
+        sentence_type = 1;
+        // Parse GGA
+        timestamp = (fields[1] && strlen(fields[1])) ? atoi(fields[1]) : 0;
+        latitude = (fields[2] && fields[3]) ? parse_nmea_latlon(fields[2], fields[3]) : 0.0f;
+        longitude = (fields[4] && fields[5]) ? parse_nmea_latlon(fields[4], fields[5]) : 0.0f;
+        fix_quality = (fields[6] && strlen(fields[6])) ? atoi(fields[6]) : 0;
+        altitude = (fields[9] && strlen(fields[9])) ? atof(fields[9]) : 0.0f;
+
+
     }
 
     if (fix_quality == 0) {
@@ -101,11 +106,13 @@ void log_gnss_data_struct(const char *nmea_sentence) {
 
     gnss_record_t record = {
         .timestamp = timestamp,
+        .date = date,
         .latitude = latitude,
         .longitude = longitude,
         .altitude = altitude,
-        .fix_quality = fix_quality
+        .sentence_type = sentence_type
     };
+
     ESP_LOGI(TAG, "GNSS record size: %d", sizeof(gnss_record_t));
 
     ESP_LOGI(TAG, "Parsed fields: ts=%" PRIu32 " lat=%.6f lon=%.6f alt=%.2f fix=%d",

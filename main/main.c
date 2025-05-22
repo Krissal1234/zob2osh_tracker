@@ -24,7 +24,6 @@ RTC_DATA_ATTR bool upload_enabled = false;
 volatile bool button_pressed = false;
 volatile int64_t press_start_time = 0;
 uint16_t interrupt_count = 0;
-uint64_t sleepTimeSeconds = 20;
 
 static void IRAM_ATTR upload_coordinates_handler(void *arg){
 
@@ -70,8 +69,7 @@ void app_main() {
   ESP_LOGI(TAG, "SSID: %s", app_config.wifi_ssid);
   ESP_LOGI(TAG, "Server: %s", app_config.server_url);
   ESP_LOGI(TAG, "Pass: %s", app_config.wifi_password);
-
-  ESP_LOGI(TAG, "GPS Timeout: %d ms", app_config.gps_timeout);
+  ESP_LOGI(TAG, "GPS Timeout: %d ms", app_config.search_for_fix_timeout_ms);
 
 
    esp_sleep_enable_ext0_wakeup(UPLOAD_PIN, 0);
@@ -95,7 +93,10 @@ void app_main() {
       //  printf("Will upload coordinates in the next cycle");
    }
 
-   esp_sleep_enable_timer_wakeup((uint64_t)sleepTimeSeconds * 1000000);
+    int sleep_time_ms = app_config.esp_sleep_time_ms;
+    uint64_t sleep_time_us = (uint64_t)sleep_time_ms * 1000;
+
+   esp_sleep_enable_timer_wakeup((uint64_t)sleep_time_us);
    esp_deep_sleep_start();
   }
 

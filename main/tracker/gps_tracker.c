@@ -10,23 +10,18 @@
 static const char *TAG = "GPS_TRACker";
 #define BATCH_SIZE 10
 
-void gps_tracker_upload() {
-    size_t offset = read_upload_offset();
-    ESP_LOGI(TAG, "Uploading GNSS data from offset: %zu", offset);
-
-    if (offset % sizeof(gnss_record_t) != 0) {
-        ESP_LOGW(TAG, "Invalid offset: not aligned to record size (%zu)", offset);
-        offset = 0; // fallback
-    }
-
-
+void gps_tracker_upload(size_t offset) {
     FILE *f = fopen(GNSS_LOG_PATH, "rb");
     if (!f) {
         ESP_LOGE(TAG, "Failed to open GNSS log file");
         return;
     }
 
-    fseek(f, offset, SEEK_SET);
+    if (fseek(f, offset, SEEK_SET) != 0) {
+        ESP_LOGE(TAG, "Failed to seek in file");
+        fclose(f);
+        return;
+    }
 
     gnss_record_t records[BATCH_SIZE];
     size_t records_read;
@@ -34,18 +29,6 @@ void gps_tracker_upload() {
     bool uploaded_any = false;
 
     while ((records_read = fread(records, GNSS_RECORD_SIZE, BATCH_SIZE, f)) > 0) {
-        for (size_t i = 0; i < records_read; i++) {
-            gnss_record_t *r = &records[i];
-
-            ESP_LOGI(TAG, "Record %zu: ts=%" PRIu32 " lat=%.6f lon=%.6f alt=%.2f fix=%u",
-                i,
-                r->timestamp,
-                r->latitude,
-                r->longitude,
-                r->altitude,
-                r->fix_quality);
-        }
-
         if (upload_gnss_batch(records, records_read)) {
             current_offset += records_read * GNSS_RECORD_SIZE;
             uploaded_any = true;
@@ -67,21 +50,21 @@ void gps_tracker_upload() {
 }
 
 void gps_tracker_run() {
-    // char fix_sentence[128];
+    char fix_sentence[128];
 
     printf(" Waiting for GPS fix...\n");
 
     //testing purposes
-    char fix_sentence[128] = "$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47";
-    printf("GPS fix acquired (TEST): %s\n", fix_sentence);
+    // char fix_sentence[128] = "$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47";
+    // printf("GPS fix acquired (TEST): %s\n", fix_sentence);
 
-    log_gnss_data_struct(fix_sentence);
+    // log_gnss_data_struct(fix_sentence);
 
-    // if (!wait_for_fix_and_get_nmea(fix_sentence, sizeof(fix_sentence), GPS_TIMEOUT_MS)) {
-    //     printf("GPS fix not acquired within timeout.\n");
-    //     return;
-    // }else{
-    //     printf("GPS fix acquired: %s\n", fix_sentence);
-    //     log_gnss_data_struct(fix_sentence);
-    // }
+    if (!wait_for_fix_and_get_nmea(fix_sentence, sizeof(fix_sentence), GPS_TIMEOUT_MS)) {
+        printf("GPS fix not acquired within timeout.\n");
+        return;
+    }else{
+        printf("GPS fix acquired: %s\n", fix_sentence);
+        log_gnss_data_struct(fix_sentence);
+    }
 }
