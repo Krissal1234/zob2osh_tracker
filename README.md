@@ -1,8 +1,8 @@
-# 🧭 ZOB ➜ OSH GNSS Tracker
+# INTRODUCING ZOBBY TRACKER
 
 **Live Tracking the Journey from Malta to Kazakhstan**  
 Website: [https://zob2osh.live](https://zob2osh.live)  
-Instagram: [@zob2osh](https://instagram.com/zob2osh)
+Instagram: [@zob_to_osh](https://instagram.com/zob_to_osh)
 
 ![ZOB2OSH Logo](https://zob2osh.live/logo.png) <!-- Replace with the actual logo URL -->
 
@@ -10,20 +10,20 @@ Instagram: [@zob2osh](https://instagram.com/zob2osh)
 
 ## 🚗 Project Description
 
-This project powers the live GPS tracking for the **ZOB to OSH** road trip — an overland journey from **Malta** to **Kazakhstan**, traversing Europe, Turkey, and Central Asia. 🌍
+This project powers the live GPS tracking for the **ZOB to OSH** road trip — an overland journey from **Malta** to **Kazakhstan**, traversing Europe, Turkey, and Central Asia. 
 
 A custom **ESP32-based GNSS tracker** records location data and uploads it to a secure server. The public can follow the trip in real-time through a web-based map.
 
 ---
 
-## 🌟 Features
+## Features
 
 - ✅ GNSS data logging: timestamp, latitude, longitude, altitude, satellite type
 - 💾 Local data storage on SD card (binary format)
 - 🔒 Secure Wi-Fi upload via HTTPS
 - 🔘 Manual upload trigger via button
 - 💤 Ultra low power usage with deep sleep mode
-- 🗺️ Web frontend to visualize live location
+- 🗺️ Web frontend to visualise live location
 
 ---
 
@@ -51,22 +51,11 @@ A custom **ESP32-based GNSS tracker** records location data and uploads it to a 
 - Sleeps between fixes to conserve power
 
 ### Python HTTPS Server
-- Authenticated POST endpoint for GNSS data
+- Authenticated POST endpoint for GNSS data from ESP32
 - Stores data in SQLite database
-- `/api/latest` serves latest fix to frontend
+- API serves latest coordinates to frontend
 
 ### Web Frontend
-- Built with JavaScript and Leaflet.js
+- Built with Angular
 - Fetches latest GNSS record from the server
 - Displays current location on an interactive map
-
----
-
-## 🧪 Setup
-
-### 1. Flash ESP32 Firmware
-Use `idf.py flash` to upload code.
-
-### 2. Prepare SD Card
-Create a `config.txt` file in the root:
-
