@@ -1,69 +1,61 @@
-| Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-C5 | ESP32-C6 | ESP32-C61 | ESP32-H2 | ESP32-P4 | ESP32-S2 | ESP32-S3 |
-| ----------------- | ----- | -------- | -------- | -------- | -------- | --------- | -------- | -------- | -------- | -------- |
+# INTRODUCING ZOBBY TRACKER
 
-# Blink Example
+**Live Tracking the Journey from Malta to Kazakhstan**  
+Website: [https://zob2osh.live](https://zob2osh.live)  
+Instagram: [@zob_to_osh](https://instagram.com/zob_to_osh)
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+![ZOB2OSH Logo](https://zob2osh.live/logo.png) <!-- Replace with the actual logo URL -->
 
-This example demonstrates how to blink a LED by using the GPIO driver or using the [led_strip](https://components.espressif.com/component/espressif/led_strip) library if the LED is addressable e.g. [WS2812](https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf). The `led_strip` library is installed via [component manager](main/idf_component.yml).
+---
 
-## How to Use Example
+## 🚗 Project Description
 
-Before project configuration and build, be sure to set the correct chip target using `idf.py set-target <chip_name>`.
+This project powers the live GPS tracking for the **ZOB to OSH** road trip — an overland journey from **Malta** to **Kazakhstan**, traversing Europe, Turkey, and Central Asia. 
 
-### Hardware Required
+A custom **ESP32-based GNSS tracker** records location data and uploads it to a secure server. The public can follow the trip in real-time through a web-based map.
 
-* A development board with normal LED or addressable LED on-board (e.g., ESP32-S3-DevKitC, ESP32-C6-DevKitC etc.)
-* A USB cable for Power supply and programming
+---
 
-See [Development Boards](https://www.espressif.com/en/products/devkits) for more information about it.
+## Features
 
-### Configure the Project
+- ✅ GNSS data logging: timestamp, latitude, longitude, altitude, satellite type
+- 💾 Local data storage on SD card (binary format)
+- 🔒 Secure Wi-Fi upload via HTTPS
+- 🔘 Manual upload trigger via button
+- 💤 Ultra low power usage with deep sleep mode
+- 🗺️ Web frontend to visualise live location
 
-Open the project configuration menu (`idf.py menuconfig`).
+---
 
-In the `Example Configuration` menu:
+## 🧰 Hardware Components
 
-* Select the LED type in the `Blink LED type` option.
-  * Use `GPIO` for regular LED
-  * Use `LED strip` for addressable LED
-* If the LED type is `LED strip`, select the backend peripheral
-  * `RMT` is only available for ESP targets with RMT peripheral supported
-  * `SPI` is available for all ESP targets
-* Set the GPIO number used for the signal in the `Blink GPIO number` option.
-* Set the blinking period in the `Blink period in ms` option.
+| Component              | Description                                           |
+|-----------------------|-------------------------------------------------------|
+| **ESP32 Dev Board**    | Microcontroller with Wi-Fi and deep sleep support     |
+| **u-blox NEO-M8N**     | High-accuracy GNSS module (GPS/GLONASS/Galileo)       |
+| **GPS Antenna**        | Active external antenna for better satellite lock     |
+| **SD Card Module**     | Stores GNSS records in binary format                  |
+| **18650 Li-ion Battery** | Long-lasting power source                           |
+| **TP4056 Charger**     | Battery charger with protection and USB input         |
+| **Push Button**        | Triggers upload manually or wakes device              |
 
-### Build and Flash
+---
 
-Run `idf.py -p PORT flash monitor` to build, flash and monitor the project.
+## 🛠️ Software Overview
 
-(To exit the serial monitor, type ``Ctrl-]``.)
+### ESP32 Firmware
+- Written in C using FreeRTOS
+- Parses NMEA sentences (`$GNRMC`, `$GPGGA`)
+- Structures records as `gnss_record_t`
+- Uploads via Wi-Fi if available
+- Sleeps between fixes to conserve power
 
-See the [Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/index.html) for full steps to configure and use ESP-IDF to build projects.
+### Python HTTPS Server
+- Authenticated POST endpoint for GNSS data from ESP32
+- Stores data in SQLite database
+- API serves latest coordinates to frontend
 
-## Example Output
-
-As you run the example, you will see the LED blinking, according to the previously defined period. For the addressable LED, you can also change the LED color by setting the `led_strip_set_pixel(led_strip, 0, 16, 16, 16);` (LED Strip, Pixel Number, Red, Green, Blue) with values from 0 to 255 in the [source file](main/blink_example_main.c).
-
-```text
-I (315) example: Example configured to blink addressable LED!
-I (325) example: Turning the LED OFF!
-I (1325) example: Turning the LED ON!
-I (2325) example: Turning the LED OFF!
-I (3325) example: Turning the LED ON!
-I (4325) example: Turning the LED OFF!
-I (5325) example: Turning the LED ON!
-I (6325) example: Turning the LED OFF!
-I (7325) example: Turning the LED ON!
-I (8325) example: Turning the LED OFF!
-```
-
-Note: The color order could be different according to the LED model.
-
-The pixel number indicates the pixel position in the LED strip. For a single LED, use 0.
-
-## Troubleshooting
-
-* If the LED isn't blinking, check the GPIO or the LED type selection in the `Example Configuration` menu.
-
-For any technical queries, please open an [issue](https://github.com/espressif/esp-idf/issues) on GitHub. We will get back to you soon.
+### Web Frontend
+- Built with Angular
+- Fetches latest GNSS record from the server
+- Displays current location on an interactive map
