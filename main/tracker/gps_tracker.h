@@ -14,10 +14,8 @@ typedef struct __attribute__((__packed__)) {
     uint8_t sentence_type;  // 1 = GGA, 2 = RMC
 } gnss_record_t;
 
-#define GNSS_RECORD_SIZE sizeof(gnss_record_t)
 
 
-#define GNSS_RECORD_SIZE sizeof(gnss_record_t)
 void gps_tracker_run();
 void gps_tracker_upload();
 #endif // GNSS_RECORD_H

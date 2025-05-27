@@ -100,7 +100,7 @@ bool upload_gnss_batch(const gnss_record_t *records, size_t count) {
 
     esp_http_client_set_header(client, "Authorization", auth_header);
 
-    size_t total_size = count * GNSS_RECORD_SIZE;
+    size_t total_size = count * sizeof(gnss_record_t);
     esp_http_client_set_post_field(client, (const char *)records, total_size);
 
     esp_err_t err = esp_http_client_perform(client);

@@ -10,17 +10,25 @@
 static const char *TAG = "GPS_TRACker";
 #define BATCH_SIZE 10
 
-void gps_tracker_upload(size_t offset) {
+void gps_tracker_upload() {
     FILE *f = fopen(GNSS_LOG_PATH, "rb");
     if (!f) {
         ESP_LOGE(TAG, "Failed to open GNSS log file");
         return;
     }
+    size_t offset = read_upload_offset();
 
     if (fseek(f, offset, SEEK_SET) != 0) {
         ESP_LOGE(TAG, "Failed to seek in file");
         fclose(f);
         return;
+    }
+    ESP_LOGI(TAG, "Reading GNSS log from offset: %zu (record size: %d)", offset, sizeof(gnss_record_t));
+
+    if (offset % sizeof(gnss_record_t) != 0) {
+        ESP_LOGE(TAG, "Invalid offset: %zu (not aligned to record size)", offset);
+        return;
+
     }
 
     gnss_record_t records[BATCH_SIZE];
@@ -28,9 +36,16 @@ void gps_tracker_upload(size_t offset) {
     size_t current_offset = offset;
     bool uploaded_any = false;
 
-    while ((records_read = fread(records, GNSS_RECORD_SIZE, BATCH_SIZE, f)) > 0) {
+
+    while ((records_read = fread(records, sizeof(gnss_record_t), BATCH_SIZE, f)) > 0) {
+        for (size_t i = 0; i < records_read; ++i) {
+            gnss_record_t *r = &records[i];
+            ESP_LOGI(TAG, "Read Record %zu: ts=%" PRIu32 ", date=%" PRIu32 ", lat=%f, lon=%f, alt=%f, type=%d",
+                     i, r->timestamp, r->date, r->latitude, r->longitude, r->altitude, r->sentence_type);
+        }
+
         if (upload_gnss_batch(records, records_read)) {
-            current_offset += records_read * GNSS_RECORD_SIZE;
+            current_offset += records_read * sizeof(gnss_record_t);
             uploaded_any = true;
             ESP_LOGI(TAG, "Uploaded %zu records. New offset: %zu", records_read, current_offset);
         } else {

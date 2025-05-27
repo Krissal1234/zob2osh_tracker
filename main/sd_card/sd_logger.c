@@ -55,11 +55,19 @@ void log_gnss_data_struct(const char *nmea_sentence) {
 
     char *fields[20] = {0};
     int i = 0;
-    char *token = strtok(sentence_copy, ",");
-    while (token && i < 20) {
-        fields[i++] = token;
-        token = strtok(NULL, ",");
+    char *p = sentence_copy;
+    i = 0;
+    while (i < 20 && p) {
+        fields[i++] = p;
+        char *comma = strchr(p, ',');
+        if (comma) {
+            *comma = '\0';       // Null-terminate this field
+            p = comma + 1;       // Move to next char after comma
+        } else {
+            break;               // No more commas
+        }
     }
+
 
     if (i < 7 || (strncmp(fields[0], "$GPGGA", 6) != 0 && strncmp(fields[0], "$GNRMC", 6) != 0)) {
         ESP_LOGW(TAG, "Unsupported or incomplete GNSS sentence: %s", fields[0]);
@@ -84,9 +92,14 @@ void log_gnss_data_struct(const char *nmea_sentence) {
         }
         latitude = (fields[3] && fields[4]) ? parse_nmea_latlon(fields[3], fields[4]) : 0.0f;
         longitude = (fields[5] && fields[6]) ? parse_nmea_latlon(fields[5], fields[6]) : 0.0f;
+
         if (fields[9] && strlen(fields[9])) {
-            date = atoi(fields[9]);  // e.g. "210525" for 25 May 2021
+            char clean_date[7] = {0};  // 6 digits + null terminator
+            strncpy(clean_date, fields[9], 6);    // Correct: only first 6 chars
+            date = atoi(clean_date);
         }
+
+
     }else if (strncmp(fields[0], "$GPGGA", 6) == 0) {
         sentence_type = 1;
         // Parse GGA
@@ -95,8 +108,6 @@ void log_gnss_data_struct(const char *nmea_sentence) {
         longitude = (fields[4] && fields[5]) ? parse_nmea_latlon(fields[4], fields[5]) : 0.0f;
         fix_quality = (fields[6] && strlen(fields[6])) ? atoi(fields[6]) : 0;
         altitude = (fields[9] && strlen(fields[9])) ? atof(fields[9]) : 0.0f;
-
-
     }
 
     if (fix_quality == 0) {
@@ -115,9 +126,8 @@ void log_gnss_data_struct(const char *nmea_sentence) {
 
     ESP_LOGI(TAG, "GNSS record size: %d", sizeof(gnss_record_t));
 
-    ESP_LOGI(TAG, "Parsed fields: ts=%" PRIu32 " lat=%.6f lon=%.6f alt=%.2f fix=%d",
-        timestamp, latitude, longitude, altitude, fix_quality);
-
+    ESP_LOGI(TAG, "Parsed fields: date=%" PRIu32 " ts=%" PRIu32 " lat=%.6f lon=%.6f alt=%.2f fix=%d",
+        date, timestamp, latitude, longitude, altitude, fix_quality);
 
     FILE *f = fopen(GNSS_LOG_PATH, "ab");
     if (!f) {
