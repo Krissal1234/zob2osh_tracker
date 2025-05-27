@@ -4,7 +4,7 @@
 Website: [https://zob2osh.live](https://zob2osh.live)  
 Instagram: [@zob_to_osh](https://instagram.com/zob_to_osh)
 
-![ZOB2OSH Logo](https://zob2osh.live/logo.png) <!-- Replace with the actual logo URL -->
+![ZOB2OSH Logo](https://zob2osh.live:8000/logo) <!-- Replace with the actual logo URL -->
 
 ---
 
