@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "zob2osh_tracker",
-    "project_version":    "91f9e68-dirty",
+    "project_version":    "d3d2491-dirty",
     "project_path":       "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker",
     "idf_path":           "/home/krissal1234/Documents/projects/esp/esp-idf",
     "build_dir":          "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/build",
@@ -1210,8 +1210,8 @@
             "managed_reqs": [],
             "managed_priv_reqs": [ "espressif__led_strip" ],
             "file": "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/build/esp-idf/main/libmain.a",
-            "sources": [ "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/main.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/config.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/sd_card/sd_logger.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/network/wifi_manager.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/gnss/gps_uart.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/tracker/gps_tracker.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/tls_cert/root_cert.c" ],
-            "include_dirs": [ "." ]
+            "sources": [ "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/main.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/config.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/sd_card/sd_logger.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/network/wifi_manager.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/gnss/gps_uart.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/tracker/gps_tracker.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/tls_cert/root_cert.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/screen_display/screen_display.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/ssd1306_driver/ssd1306.c", "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/main/ssd1306_driver/ssd_1306_i2c_new.c" ],
+            "include_dirs": [ ".", "screen_display" ]
         },
         "mbedtls": {
             "alias": "idf::mbedtls",
@@ -2860,7 +2860,7 @@
             "priv_reqs": [ "espressif__led_strip" ],
             "managed_reqs": [],
             "managed_priv_reqs": [ "espressif__led_strip" ],
-            "include_dirs": [ "." ]
+            "include_dirs": [ ".", "screen_display" ]
         },
         "espressif__led_strip": {
             "alias": "idf::espressif__led_strip",

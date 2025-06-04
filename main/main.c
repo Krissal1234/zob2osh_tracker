@@ -10,7 +10,7 @@
 #include "esp_sleep.h"
 #include "tracker/gps_tracker.h"  // Adjust the path as needed based on your folder layout
 #include "config.h"
-
+#include "screen_display/screen_display.h"
 #define UPLOAD_PIN 33
 #define UPLOAD_BUTTON 12
 #define UPLOAD_BUTTON_DURATION_US (5 * 1000000)
@@ -55,6 +55,12 @@ void app_main() {
    //uart init before polling gps data
    init_uart();
 
+   screen_display_init();
+   screen_display_battery_status(24);
+   screen_display_log("WIFI:OK");
+   screen_display_log("TEST");
+   // Initialize OLED
+
  // 1. Initialize SD card first
  if (!sd_logger_init()) {
     ESP_LOGE(TAG, "SD card init failed, aborting");
@@ -71,7 +77,7 @@ void app_main() {
   ESP_LOGI(TAG, "Pass: %s", app_config.wifi_password);
   ESP_LOGI(TAG, "GPS Timeout: %d ms", app_config.search_for_fix_timeout_ms);
 
-
+  // screen_display_clear_loop();
    esp_sleep_enable_ext0_wakeup(UPLOAD_PIN, 0);
 
    esp_sleep_wakeup_cause_t wake_cause = esp_sleep_get_wakeup_cause();
