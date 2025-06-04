@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "zob2osh_tracker",
-    "project_version":    "d3d2491-dirty",
+    "project_version":    "a7e582e-dirty",
     "project_path":       "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker",
     "idf_path":           "/home/krissal1234/Documents/projects/esp/esp-idf",
     "build_dir":          "/home/krissal1234/Documents/projects/esp/esp-idf/projects/zob2osh_tracker/build",

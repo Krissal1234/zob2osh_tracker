@@ -24,13 +24,13 @@ void screen_display_init(void) {
 }
 
 void screen_display_battery_status(int battery_percent) {
-    snprintf(battery_line, sizeof(battery_line), "Batt:%3d%%", battery_percent);
-    ssd1306_display_text(&oled_dev, 0, battery_line, strlen(battery_line), false);
+    snprintf(battery_line, sizeof(battery_line), "Batt:%d%%", battery_percent);
+    ssd1306_display_text(&oled_dev, 1, battery_line, strlen(battery_line), false);
     ssd1306_show_buffer(&oled_dev);
 }
 
 void screen_display_log(const char *text) {
-    ssd1306_display_text(&oled_dev, 1, "        ", 8, false);  // Clear previous log line
-    ssd1306_display_text(&oled_dev, 1, text, strlen(text), false);
+    ssd1306_display_text(&oled_dev, 0, "        ", 8, false);  // Clear previous log line
+    ssd1306_display_text(&oled_dev, 0, text, strlen(text), false);
     ssd1306_show_buffer(&oled_dev);
 }

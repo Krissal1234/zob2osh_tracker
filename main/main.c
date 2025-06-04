@@ -57,18 +57,19 @@ void app_main() {
 
    screen_display_init();
    screen_display_battery_status(24);
-   screen_display_log("WIFI:OK");
-   screen_display_log("TEST");
+   screen_display_log("ZOBBY");
    // Initialize OLED
 
  // 1. Initialize SD card first
  if (!sd_logger_init()) {
     ESP_LOGE(TAG, "SD card init failed, aborting");
+    screen_display_log("SDINIT:!");
   }
 
   // 2. Load config from SD card
   if (!load_config_from_file("/sdcard/config.txt")) {
     ESP_LOGE(TAG, "Failed to load config file");
+    screen_display_log("CONFIG:!");
   }
 
   ESP_LOGI(TAG, "Config loaded:");
@@ -85,9 +86,12 @@ void app_main() {
    if (wake_cause == ESP_SLEEP_WAKEUP_TIMER) {
        gps_tracker_run();
        if (upload_enabled) {
+          screen_display_log("WIFI:...");
         if (connect_wifi() == WIFI_SUCCESS) {
             gps_tracker_upload();  // Reads and uploads GNSS records
         } else {
+            screen_display_log("CONN:!!!");
+
             ESP_LOGE("MAIN", "Wi-Fi connection failed, cannot upload");
         }
          //enter logic to upload coordinates to server

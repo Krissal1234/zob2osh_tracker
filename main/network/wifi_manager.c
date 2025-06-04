@@ -17,7 +17,7 @@
 #include <inttypes.h>
 #include "../tls_cert/root_cert.c"
 #include "mbedtls/base64.h"
-
+#include "screen_display/screen_display.h"
 
 /** GLOBAL VARIABLES **/
 static EventGroupHandle_t wifi_event_group;
@@ -108,10 +108,13 @@ bool upload_gnss_batch(const gnss_record_t *records, size_t count) {
 
     if (err == ESP_OK) {
         int status = esp_http_client_get_status_code(client);
+
         ESP_LOGI(TAG, "Batch POST success: HTTP %d", status);
+        screen_display_log("WIFI:OK");
         return status == 200;
     } else {
         ESP_LOGE(TAG, "Batch POST failed: %s", esp_err_to_name(err));
+        screen_display_log("WIFI:!!!");
         return false;
     }
 }
