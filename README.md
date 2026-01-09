@@ -4,11 +4,11 @@
 Website: [https://zob2osh.live](https://zob2osh.live)  
 Instagram: [@zob_to_osh](https://instagram.com/zob_to_osh)
 
-![ZOB2OSH Logo](https://zob2osh.live:8000/logo) <!-- Replace with the actual logo URL -->
+![ZOB2OSH Logo](https://zob2osh.live:8000/logo)
 
 ---
 
-## 🚗 Project Description
+## Project Description
 
 This project powers the live GPS tracking for the **ZOB to OSH** road trip — an overland journey from **Malta** to **Kazakhstan**, traversing Europe, Turkey, and Central Asia. 
 
@@ -18,16 +18,16 @@ A custom **ESP32-based GNSS tracker** records location data and uploads it to a 
 
 ## Features
 
-- ✅ GNSS data logging: timestamp, latitude, longitude, altitude, satellite type
-- 💾 Local data storage on SD card (binary format)
-- 🔒 Secure Wi-Fi upload via HTTPS
-- 🔘 Manual upload trigger via button
-- 💤 Ultra low power usage with deep sleep mode
-- 🗺️ Web frontend to visualise live location
+- GNSS data logging: timestamp, latitude, longitude, altitude, satellite type
+- Local data storage on SD card (binary format)
+- Secure Wi-Fi upload via HTTPS
+- Manual upload trigger via button
+- Ultra low power usage with deep sleep mode
+- Web frontend to visualise live location
 
 ---
 
-## 🧰 Hardware Components
+## Hardware Components
 
 | Component              | Description                                           |
 |-----------------------|-------------------------------------------------------|
@@ -41,7 +41,7 @@ A custom **ESP32-based GNSS tracker** records location data and uploads it to a 
 
 ---
 
-## 🛠️ Software Overview
+## Software Overview
 
 ### ESP32 Firmware
 - Written in C using FreeRTOS
