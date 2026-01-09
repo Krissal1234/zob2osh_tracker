@@ -27,37 +27,6 @@ static char auth_plain[130];
 static char auth_base64[173];
 static char auth_header[179];
 
-// bool upload_gnss_record(const gnss_record_t *record) {
-//     if (!record) {
-//         ESP_LOGE(TAG, "Null GNSS record passed to upload");
-//         return false;
-//     }
-
-//     esp_http_client_config_t config = {
-//         .url = TCP_SERVER_IP,
-//         .cert_pem = (const char *)isrg_root_x1_pem,  // the root cert
-//         .method = HTTP_METHOD_POST,
-//         .timeout_ms = 5000,
-//     };
-
-
-//     esp_http_client_handle_t client = esp_http_client_init(&config);
-
-//     esp_http_client_set_header(client, "Content-Type", "application/octet-stream");
-//     esp_http_client_set_post_field(client, (const char *)record, GNSS_RECORD_SIZE);
-
-//     esp_err_t err = esp_http_client_perform(client);
-//     esp_http_client_cleanup(client);
-
-//     if (err == ESP_OK) {
-//         int status = esp_http_client_get_status_code(client);
-//         ESP_LOGI(TAG, "POST success: HTTP %d", status);
-//         return status == 200;
-//     } else {
-//         ESP_LOGE(TAG, "POST failed: %s", esp_err_to_name(err));
-//         return false;
-//     }
-// }
 bool upload_gnss_batch(const gnss_record_t *records, size_t count) {
     if (!records || count == 0) {
         ESP_LOGE(TAG, "Invalid batch upload parameters");
@@ -73,7 +42,7 @@ bool upload_gnss_batch(const gnss_record_t *records, size_t count) {
             rec->longitude,
             rec->altitude,
             rec->sentence_type,
-            rec->date);  // <-- likely this is uint32_t
+            rec->date);
 
     }
 
@@ -119,9 +88,7 @@ bool upload_gnss_batch(const gnss_record_t *records, size_t count) {
     }
 }
 
-// Configurable network parameters
 
-/** FUNCTION DEFINITIONS **/
 static void wifi_event_handler(void* arg, esp_event_base_t event_base,
                                 int32_t event_id, void* event_data)
 {

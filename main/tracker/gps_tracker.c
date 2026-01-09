@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include "esp_log.h"
 #include <string.h>
-#include "../network/wifi_manager.h"  // Adjust path if needed
-#include "../tracker/gps_tracker.h"      // Struct + GNSS_RECORD_SIZE
-#include <inttypes.h>  // Needed for PRIu32
+#include "../network/wifi_manager.h"
+#include "../tracker/gps_tracker.h"
+#include <inttypes.h>
 static const char *TAG = "GPS_TRACker";
 #define BATCH_SIZE 10
 
@@ -68,12 +68,6 @@ void gps_tracker_run() {
     char fix_sentence[128];
 
     printf(" Waiting for GPS fix...\n");
-
-    //testing purposes
-    // char fix_sentence[128] = "$GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47";
-    // printf("GPS fix acquired (TEST): %s\n", fix_sentence);
-
-    // log_gnss_data_struct(fix_sentence);
 
     if (!wait_for_fix_and_get_nmea(fix_sentence, sizeof(fix_sentence), GPS_TIMEOUT_MS)) {
         printf("GPS fix not acquired within timeout.\n");

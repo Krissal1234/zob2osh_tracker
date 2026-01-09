@@ -1,8 +1,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <stdbool.h>  // <-- Add this
+#include <stdbool.h>
 
+//config is on SD card at start, Global configs are updated
 typedef struct {
     char wifi_ssid[64];
     char wifi_password[64];

@@ -8,9 +8,10 @@
 #include <sys/stat.h>
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
-#include <errno.h>   // <-- at the top
-#include "../tracker/gps_tracker.h"  // Adjust the path based on your structure
-#include <inttypes.h>  // Make sure this is included
+#include "../screen_display/screen_display.h"
+#include <errno.h>
+#include "../tracker/gps_tracker.h"
+#include <inttypes.h>
 static const char *TAG = "SD_LOGGER";
 
 sdmmc_card_t *card;
@@ -56,20 +57,23 @@ void log_gnss_data_struct(const char *nmea_sentence) {
     char *fields[20] = {0};
     int i = 0;
     char *p = sentence_copy;
-    i = 0;
+
     while (i < 20 && p) {
         fields[i++] = p;
         char *comma = strchr(p, ',');
         if (comma) {
-            *comma = '\0';       // Null-terminate this field
-            p = comma + 1;       // Move to next char after comma
+            *comma = '\0';
+            p = comma + 1;
         } else {
-            break;               // No more commas
+            break;
         }
     }
 
-
-    if (i < 7 || (strncmp(fields[0], "$GPGGA", 6) != 0 && strncmp(fields[0], "$GNRMC", 6) != 0)) {
+    // Accepts only $GNRMC and $GPRMC
+    if (i < 7 || (
+        strncmp(fields[0], "$GPGGA", 6) != 0 &&
+        strncmp(fields[0], "$GNRMC", 6) != 0 &&
+        strncmp(fields[0], "$GPRMC", 6) != 0)) {
         ESP_LOGW(TAG, "Unsupported or incomplete GNSS sentence: %s", fields[0]);
         return;
     }
@@ -80,28 +84,30 @@ void log_gnss_data_struct(const char *nmea_sentence) {
     uint8_t sentence_type = 0;
     uint8_t fix_quality = 0;
 
-    if (strncmp(fields[0], "$GNRMC", 6) == 0) {
+    if (strncmp(fields[0], "$GNRMC", 6) == 0 || strncmp(fields[0], "$GPRMC", 6) == 0) {
         sentence_type = 2;
+
         // Parse RMC
         timestamp = (fields[1] && strlen(fields[1])) ? atoi(fields[1]) : 0;
-        // Field 2 is status: A=active, V=void
+
         if (fields[2] && fields[2][0] == 'A') {
             fix_quality = 1;
         } else {
             fix_quality = 0;
         }
+
         latitude = (fields[3] && fields[4]) ? parse_nmea_latlon(fields[3], fields[4]) : 0.0f;
         longitude = (fields[5] && fields[6]) ? parse_nmea_latlon(fields[5], fields[6]) : 0.0f;
 
         if (fields[9] && strlen(fields[9])) {
-            char clean_date[7] = {0};  // 6 digits + null terminator
-            strncpy(clean_date, fields[9], 6);    // Correct: only first 6 chars
+            char clean_date[7] = {0};
+            strncpy(clean_date, fields[9], 6);
             date = atoi(clean_date);
         }
 
-
-    }else if (strncmp(fields[0], "$GPGGA", 6) == 0) {
+    } else if (strncmp(fields[0], "$GPGGA", 6) == 0) {
         sentence_type = 1;
+
         // Parse GGA
         timestamp = (fields[1] && strlen(fields[1])) ? atoi(fields[1]) : 0;
         latitude = (fields[2] && fields[3]) ? parse_nmea_latlon(fields[2], fields[3]) : 0.0f;
@@ -124,8 +130,6 @@ void log_gnss_data_struct(const char *nmea_sentence) {
         .sentence_type = sentence_type
     };
 
-    ESP_LOGI(TAG, "GNSS record size: %d", sizeof(gnss_record_t));
-
     ESP_LOGI(TAG, "Parsed fields: date=%" PRIu32 " ts=%" PRIu32 " lat=%.6f lon=%.6f alt=%.2f fix=%d",
         date, timestamp, latitude, longitude, altitude, fix_quality);
 
@@ -143,15 +147,13 @@ void log_gnss_data_struct(const char *nmea_sentence) {
         ESP_LOGE(TAG, "Failed to write GNSS record to file");
     } else {
         ESP_LOGI(TAG, "Logged GNSS record (lat=%.6f, lon=%.6f, alt=%.1f)", latitude, longitude, altitude);
+        screen_display_log("GPS:OK");
     }
 }
 
 
-
 void log_gnss_data(const char *gnss_string, size_t string_length) {
     ESP_LOGI(TAG, "Logging GNSS data...");
-
-    // save_upload_offset(1034);
 
     FILE *f = fopen(GNSS_LOG_PATH, "a");
     if (!f) {
@@ -159,7 +161,7 @@ void log_gnss_data(const char *gnss_string, size_t string_length) {
         return;
     }
 
-    size_t start_offset = ftell(f);  // Capture position before writing
+    size_t start_offset = ftell(f);
 
     size_t written = fwrite(gnss_string, 1, string_length, f);
     fsync(fileno(f));
@@ -172,14 +174,8 @@ void log_gnss_data(const char *gnss_string, size_t string_length) {
     }
 
     ESP_LOGI(TAG, "GNSS data logged (%zu bytes)", written);
-    // vTaskDelay(pdMS_TO_TICKS(100));
-    // Save initial upload offset if needed
     save_upload_offset(start_offset);
 }
-
-
-
-
 
 bool sd_logger_init(void){
     gpio_reset_pin(SD_MOSI);
@@ -210,7 +206,6 @@ bool sd_logger_init(void){
       .max_transfer_sz = 4096
   };
 
-  // Initialize SPI Bus
   esp_err_t ret = spi_bus_initialize(SPI2_HOST, &bus_cfg, 1);
   if (ret != ESP_OK) {
       ESP_LOGE(TAG, "SPI bus init failed: %s", esp_err_to_name(ret));
@@ -222,7 +217,7 @@ bool sd_logger_init(void){
   slot_config.host_id = SPI2_HOST;
   vTaskDelay(pdMS_TO_TICKS(100));
 
-  // Mount SD Card
+    //mounting sd card
   ret = esp_vfs_fat_sdspi_mount(MOUNT_POINT, &host, &slot_config, &mount_config, &card);
   if (ret != ESP_OK) {
       ESP_LOGE(TAG, "Failed to mount SD card: %s", esp_err_to_name(ret));

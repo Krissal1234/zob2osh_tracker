@@ -8,39 +8,75 @@
 #include "esp_log.h"
 #include "gnss/gps_uart.h"
 #include "esp_sleep.h"
-#include "tracker/gps_tracker.h"  // Adjust the path as needed based on your folder layout
+#include "tracker/gps_tracker.h"
 #include "config.h"
+#include "driver/adc.h"
 #include "screen_display/screen_display.h"
-#define UPLOAD_PIN 33
-#define UPLOAD_BUTTON 12
+#define UPLOAD_PIN 4
+#define UPLOAD_BUTTON 4
 #define UPLOAD_BUTTON_DURATION_US (5 * 1000000)
 
 
 static const char *TAG = "BUTTON";
 
-// volatile bool upload_enabled = false;
 RTC_DATA_ATTR bool upload_enabled = false;
 
 volatile bool button_pressed = false;
 volatile int64_t press_start_time = 0;
 uint16_t interrupt_count = 0;
 
+#define BATTERY_ADC_CHANNEL ADC1_CHANNEL_5
+#define ADC_MAX_READING     4095.0
+#define REF_VOLTAGE         3.3
+#define BATT_FULL_VOLTAGE   3.28            // Estimated voltage when battery is 100%
+#define BATT_EMPTY_VOLTAGE  2.7             // Estimated voltage when battery is 0% - from custom battery used in project
+
+void init_battery_adc() {
+    adc1_config_width(ADC_WIDTH_BIT_12);
+    adc1_config_channel_atten(BATTERY_ADC_CHANNEL, ADC_ATTEN_DB_11);
+}
+
+float read_battery_voltage() {
+    int raw = adc1_get_raw(BATTERY_ADC_CHANNEL);
+    float voltage = (raw / ADC_MAX_READING) * REF_VOLTAGE;
+    return voltage;
+}
+
+int battery_percent(float analog_voltage) {
+  const float v_table[] = {
+      3.231, 3.154, 3.076, 2.999, 2.922, 2.845,
+      2.768, 2.691, 2.614, 2.537, 2.460, 2.307
+  };
+  const int p_table[] = {
+      100,  90,  80,  70,  60,  50,
+       40,  30,  20,  10,   5,   0
+  };
+  const int len = sizeof(v_table) / sizeof(v_table[0]);
+
+  if (analog_voltage >= v_table[0]) return 100;
+  if (analog_voltage <= v_table[len - 1]) return 0;
+
+  for (int i = 0; i < len - 1; i++) {
+      if (analog_voltage <= v_table[i] && analog_voltage > v_table[i + 1]) {
+          float v1 = v_table[i];
+          float v2 = v_table[i + 1];
+          int p1 = p_table[i];
+          int p2 = p_table[i + 1];
+          // Linear interpolation
+          return p1 + (int)((analog_voltage - v1) * (p2 - p1) / (v2 - v1));
+      }
+  }
+
+  return 0;
+}
+
+
+
 static void IRAM_ATTR upload_coordinates_handler(void *arg){
 
    upload_enabled = true;
 
 }
-// void test_offset_write(void) {
-//   FILE *f = fopen("/sdcard/test_offset.bin", "w");
-//   if (!f) {
-//       perror("test_offset fopen");
-//       ESP_LOGE(TAG, "Test offset file failed to open");
-//       return;
-//   }
-//   fprintf(f, "1234");
-//   fclose(f);
-//   ESP_LOGI(TAG, "Test offset file written!");
-// }
 
 void app_main() {
    //interrup pin setup for GPIO 21 - UPLOAD PIN
@@ -54,19 +90,24 @@ void app_main() {
 
    //uart init before polling gps data
    init_uart();
-
    screen_display_init();
-   screen_display_battery_status(24);
-   screen_display_log("ZOBBY");
-   // Initialize OLED
+   init_battery_adc();
+   float batt_voltage = read_battery_voltage();
+   int batt_percent = battery_percent(batt_voltage);
 
- // 1. Initialize SD card first
+   ESP_LOGI(TAG, "Battery voltage: %.2f V", batt_voltage);
+   ESP_LOGI(TAG, "Battery percent: %d%%", batt_percent);
+   screen_display_battery_status(batt_percent);
+
+   screen_display_log("ZOBBY");
+
+ // Initialising SD card
  if (!sd_logger_init()) {
     ESP_LOGE(TAG, "SD card init failed, aborting");
     screen_display_log("SDINIT:!");
   }
 
-  // 2. Load config from SD card
+  // Loading config from SD card
   if (!load_config_from_file("/sdcard/config.txt")) {
     ESP_LOGE(TAG, "Failed to load config file");
     screen_display_log("CONFIG:!");
@@ -78,7 +119,6 @@ void app_main() {
   ESP_LOGI(TAG, "Pass: %s", app_config.wifi_password);
   ESP_LOGI(TAG, "GPS Timeout: %d ms", app_config.search_for_fix_timeout_ms);
 
-  // screen_display_clear_loop();
    esp_sleep_enable_ext0_wakeup(UPLOAD_PIN, 0);
 
    esp_sleep_wakeup_cause_t wake_cause = esp_sleep_get_wakeup_cause();
@@ -88,19 +128,18 @@ void app_main() {
        if (upload_enabled) {
           screen_display_log("WIFI:...");
         if (connect_wifi() == WIFI_SUCCESS) {
-            gps_tracker_upload();  // Reads and uploads GNSS records
+            gps_tracker_upload();
         } else {
             screen_display_log("CONN:!!!");
 
             ESP_LOGE("MAIN", "Wi-Fi connection failed, cannot upload");
         }
-         //enter logic to upload coordinates to server
 
            upload_enabled = false;
        }
    } else if (wake_cause == ESP_SLEEP_WAKEUP_EXT0) {
-       upload_enabled = true;  // Set the flag if woken by button
-      //  printf("Will upload coordinates in the next cycle");
+       upload_enabled = true;  //upload button pressed
+       printf("Will upload coordinates in the next cycle");
    }
 
     int sleep_time_ms = app_config.esp_sleep_time_ms;

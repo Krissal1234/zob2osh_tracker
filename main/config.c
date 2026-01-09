@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdbool.h>  // <-- Add this
+#include <stdbool.h>
 
-config_t app_config;  // global instance
+config_t app_config;
 
 bool load_config_from_file(const char *path) {
     FILE *f = fopen(path, "r");

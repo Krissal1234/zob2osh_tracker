@@ -22,7 +22,7 @@ void ssd1306_init(SSD1306_t * dev, int width, int height)
 	} else {
 		i2c_init(dev, width, height);
 	}
-	// Initialize internal buffer
+	// initialize internal buffer
 	for (int i = 0; i < dev->_pages; i++) {
 		memset(dev->_page[i]._segs, 0x00, SSD1306_SEG_MAX); // not just dev->_width
 	}

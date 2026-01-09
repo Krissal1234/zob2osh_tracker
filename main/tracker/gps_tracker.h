@@ -18,4 +18,4 @@ typedef struct __attribute__((__packed__)) {
 
 void gps_tracker_run();
 void gps_tracker_upload();
-#endif // GNSS_RECORD_H
+#endif
