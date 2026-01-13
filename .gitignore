@@ -1,0 +1,12 @@
+build/
+bin/
+obj/
+
+sdkconfig
+sdkconfig.old
+
+.cache/
+.vscode/
+.devcontainer/
+.clangd/
+
