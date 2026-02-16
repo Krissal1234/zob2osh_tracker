@@ -37,26 +37,26 @@ A custom **ESP32-based GNSS tracker** records location data and uploads it to a 
 | Component | Description |
 | :--- | :--- |
 | **ESP32 Dev Board** | Microcontroller with Wi-Fi and deep sleep support |
-| **u-blox NEO-M8N** | High-accuracy GNSS module (GPS/GLONASS/Galileo) |
+| **u-blox NEO-M8N** | GNSS module (GPS/GLONASS/Galileo) |
 | **GPS Antenna** | Active external antenna for better satellite lock |
-| **SD Card Module** | Stores GNSS records in binary format |
-| **18650 Li-ion Battery** | Long-lasting power source |
-| **TP4056 Charger** | Battery charger with protection and USB input |
-| **Push Button** | Triggers upload manually or wakes device |
+| **SD Card Module** | Stored GNSS records in binary format |
+| **18650 Li-ion Battery** | Power source |
+| **TP4056 Charger** | Battery charger with protection and USB-C input |
+| **Push Button** | Triggers upload manually |
 
 ---
-## Technical Deep Dive
+## About
 
-### 1. Robust Persistence: Tracking with Offset Management
+### 1. Persistence: Tracking with Offset Management
 A critical feature of the firmware is its handling of Cold Storage on the SD card, ensuring zero data loss during extended periods without Wi-FI in the more remote countries where we had no internet access.
 
 
-* **Persistent Cursors**: The tracker maintains an `UPLOAD_OFFSET_PATH` file that stores exactly where the last successful upload stopped.
+* **Cursors**: The tracker maintains an `UPLOAD_OFFSET_PATH` file that stores exactly where the last successful upload stopped.
 * **Resume Capability**: On boot or wake, the system calls `read_upload_offset()`. If a batch upload fails due to poor connectivity, the cursor is not updated, ensuring data is never skipped and is instead retried during the next connection window.
 * **Offset Alignment**: The parser performs safety checks to ensure the offset is always aligned to the size of a `gnss_record_t`, preventing file corruption or partial record reads.
 
 ### 2. Data Serialisation 
-Instead of using bulky CSV or JSON files, the firmware writes raw C structs directly to the SD card using `fwrite`. This reduces the storage footprint, minimises CPU overhead, and extends SD card lifespan through reduced write amplification.
+Instead of using bulky CSV or JSON files, the firmware writes raw C structs directly to the SD card using `fwrite`. This reduces the storage size and minimises CPU overhead through reduced write amplification.
 
 ```cpp
 /**
@@ -81,7 +81,7 @@ typedef struct __attribute__((__packed__)) {
 * Written in **C** using **FreeRTOS**.
 * Parses NMEA sentences (`$GNRMC`, `$GPGGA`).
 * Stores data locally and uploads via Wi-Fi when a connection is available.
-* Implements deep sleep cycles between location fixes to maximize battery life.
+* Implements deep sleep cycles between location fixes to maximise battery life.
 
 ### Python HTTPS Server
 * Authenticated POST endpoint to receive data from the ESP32.
@@ -90,13 +90,13 @@ typedef struct __attribute__((__packed__)) {
 
 ### Web Frontend
 * Built with **Angular**.
-* Displays the live "Last Seen" location and the historical path on an interactive map.
+* Displays the live location and the historical path on an interactive map.
 
 ---
 
 ## Website Gallery
 
-While the website is no longer running due to financial reasons, here are snapshots of the live interface that users interacted with during the adventure.
+While the website is no longer running due to the financial costs of uptime, here are snapshots of the live interface that users interacted with during the adventure.
 
 <div align="center">
   <table border="0">
